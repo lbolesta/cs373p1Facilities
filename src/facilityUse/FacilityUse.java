@@ -8,5 +8,6 @@ public interface FacilityUse {
 	public void listInspections(); //choose params and returns 
 	public void listActualUsage(); //choose params and returns 
 	public void calcUsageRate(); //choose params and returns 
+	public void reserveFacility(); //choose params and returns
 
 }
