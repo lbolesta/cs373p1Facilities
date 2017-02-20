@@ -29,7 +29,7 @@ public class UsageClient implements IFacilityUse<Reservation, Inspection> {
 			Reservation reservation = new Reservation();
 			reservation.setStartTime(startTime);
 			reservation.setEndTime(endTime);
-			reservations.add(reservation);
+			this.addReservation(reservation);
 		}
 		return !inUse;
 	}
@@ -46,7 +46,6 @@ public class UsageClient implements IFacilityUse<Reservation, Inspection> {
 				}
 			}
 		}
-
 	}
 
 	@Override
@@ -84,11 +83,11 @@ public class UsageClient implements IFacilityUse<Reservation, Inspection> {
 		this.reservations = reservations;
 	}
 	
-	public void addReservation(Reservation reservation){
+	private void addReservation(Reservation reservation){
 		reservations.add(reservation);
 	}
 	
-	public void removeReservation(Reservation reservation) {
+	private void removeReservation(Reservation reservation) {
 		if (reservations.contains(reservation)){
 			reservations.remove(reservation);
 		}

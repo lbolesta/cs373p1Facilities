@@ -17,11 +17,12 @@ public class MaintenanceClient implements IFacilityMaintenance<MaintRequest, Mai
 	}
 
 	@Override
-	public void scheduleMaintenance(MaintRequest request, ZonedDateTime startTime) {
+	public void scheduleMaintenance(MaintRequest request, ZonedDateTime startTime, ZonedDateTime endTime) {
 		FacilityProblem problem = request.getFacilityProblem();
 		MaintOrder order = new MaintOrder();
 		order.setFacilityProblem(problem);
 		order.setStartTime(startTime);
+		order.setEndTime(endTime);
 		orders.add(order);
 	}
 
@@ -42,7 +43,6 @@ public class MaintenanceClient implements IFacilityMaintenance<MaintRequest, Mai
 
 	@Override
 	public float calcDownTimeForFacility(ZonedDateTime since) {
-		// TODO Calculate total time facility open
 		float downTime = 0;
 		ZonedDateTime now = ZonedDateTime.now();
 		float total = (Duration.between(since, now)).toHours();
