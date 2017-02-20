@@ -47,8 +47,14 @@ public class MaintenanceClient implements IFacilityMaintenance<MaintRequest, Mai
 		ZonedDateTime now = ZonedDateTime.now();
 		float total = (Duration.between(since, now)).toHours();
 		for (FacilityProblem problem : listFacilityProblems()) {
-			Duration d = Duration.between(problem.getStartTime(), problem.getEndTime());
-			downTime += d.toHours();
+			if(problem.getStartTime().isAfter(since)){
+				Duration d = Duration.between(problem.getStartTime(), problem.getEndTime());
+				downTime += d.toHours();
+			} else if (problem.getEndTime().isAfter(since)){
+				Duration d = Duration.between(since, problem.getEndTime());
+				downTime += d.toHours();
+			}
+			
 		}
 		return downTime/total;
 	}

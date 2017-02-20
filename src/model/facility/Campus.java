@@ -3,12 +3,14 @@ package model.facility;
 import java.util.List;
 
 import model.maintenance.MaintenanceClient;
+import model.use.UsageClient;
 
 public class Campus extends Facility {
 
 	private List<IFacility<UnitInfo>> subunits;
 	private UnitInfo info;
 	private MaintenanceClient maint;
+	private UsageClient usage;
 
 	@Override
 	public UnitInfo getInfo() {
@@ -32,6 +34,11 @@ public class Campus extends Facility {
 			availableCapacity += subunit.requestAvailableCapacity();
 		}
 		return availableCapacity;
+	}
+
+	@Override
+	public UsageClient getUsageClient() {
+		return usage;
 	}
 
 }

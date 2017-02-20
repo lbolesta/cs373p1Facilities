@@ -1,14 +1,15 @@
 package model.use;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
-public interface IFacilityUse {
+public interface IFacilityUse<T,S> {
 
-	public boolean isInUseDuringInterval(int startTime, int endTime);
-	public void assignFacilityToUse();
-	public void vacateFacility();
-	public List<?> listInspections();
-	public List<?> listActualUsage();
-	public float calcUsageRate();
+	public boolean isInUseDuringInterval(ZonedDateTime startTime, ZonedDateTime endTime);
+	public boolean assignFacilityToUse(ZonedDateTime startTime, ZonedDateTime endTime);
+	public void vacateFacility(ZonedDateTime startTime, ZonedDateTime endTime);
+	public List<S> listInspections();
+	public List<T> listActualUsage();
+	public float calcUsageRate(ZonedDateTime since);
 
 }
