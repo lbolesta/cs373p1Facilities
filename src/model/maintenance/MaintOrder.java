@@ -1,6 +1,7 @@
 package model.maintenance;
 
 import java.util.List;
+import java.time.Duration;
 import java.time.ZonedDateTime;
 
 public class MaintOrder {
@@ -10,10 +11,9 @@ public class MaintOrder {
 	private ZonedDateTime endTime;
 	private List<Material> materials;
 	private List<Worker> workers;
-	
-	public MaintOrder(FacilityProblem facilityProblem, ZonedDateTime startTime){
-		this.setFacilityProblem(facilityProblem);
-		this.startTime = startTime;
+
+	public MaintOrder() {
+		// TODO Auto-generated constructor stub
 	}
 
 	public FacilityProblem getFacilityProblem() {
@@ -22,14 +22,19 @@ public class MaintOrder {
 
 	public void setFacilityProblem(FacilityProblem facilityProblem) {
 		this.facilityProblem = facilityProblem;
+		this.facilityProblem.setAssigned(true);
 	}
 
-	public float getCost() {
+	public float calcCost() {
+		cost = 0;
+		float hours = (Duration.between(startTime, endTime)).toHours();
+		for (Material material : materials) {
+			cost += material.getCost();
+		}
+		for (Worker worker : workers) {
+			cost += worker.getWage() * hours;
+		}
 		return cost;
-	}
-
-	public void setCost(float cost) {
-		this.cost = cost;
 	}
 
 	public ZonedDateTime getStartTime() {

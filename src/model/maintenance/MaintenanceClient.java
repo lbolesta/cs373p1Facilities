@@ -13,13 +13,15 @@ public class MaintenanceClient implements IFacilityMaintenance<MaintRequest, Mai
 	@Override
 	public void makeFacilityMaintRequest(String description) {
 		MaintRequest request = new MaintRequest(description);
-		this.requests.add(request);
+		requests.add(request);
 	}
 
 	@Override
 	public void scheduleMaintenance(MaintRequest request, ZonedDateTime startTime) {
-		FacilityProblem facilityProblem = request.getFacilityProblem();
-		MaintOrder order = new MaintOrder(facilityProblem, startTime);
+		FacilityProblem problem = request.getFacilityProblem();
+		MaintOrder order = new MaintOrder();
+		order.setFacilityProblem(problem);
+		order.setStartTime(startTime);
 		orders.add(order);
 	}
 
@@ -27,45 +29,49 @@ public class MaintenanceClient implements IFacilityMaintenance<MaintRequest, Mai
 	public float calcMaintenanceCostForFacility() {
 		float cost = 0;
 		for (MaintOrder order : this.orders) {
-			cost += order.getCost();
+			cost += order.calcCost();
 		}
 		return cost;
 	}
 
 	@Override
-	public float calcProblemRateForFacility() {
+	public float calcProblemRateForFacility(ZonedDateTime since) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public int calcDownTimeForFacility() {
+	public float calcDownTimeForFacility(ZonedDateTime since) {
 		// TODO Calculate total time facility open
-		int downTime = 0;
+		float downTime = 0;
+		ZonedDateTime now = ZonedDateTime.now();
+		float total = (Duration.between(since, now)).toHours();
 		for (FacilityProblem problem : listFacilityProblems()) {
 			Duration d = Duration.between(problem.getStartTime(), problem.getEndTime());
-			downTime += d.getSeconds();
+			downTime += d.toHours();
 		}
-		return downTime;
+		return downTime/total;
 	}
 
 	@Override
 	public List<MaintRequest> listMaintRequests() {
-		return this.requests;
+		return requests;
 	}
 
 	@Override
 	public List<MaintOrder> listMaintenance() {
-		return this.orders;
+		return orders;
 	}
 
 	@Override
 	public List<FacilityProblem> listFacilityProblems() {
 		for (MaintRequest request : requests) {
 			FacilityProblem problem = request.getFacilityProblem();
-			this.problems.add(problem);
+			if (!problems.contains(problem)) {
+				problems.add(problem);
+			}
 		}
-		return this.problems;
+		return problems;
 	}
 
 }

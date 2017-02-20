@@ -6,10 +6,12 @@ public class FacilityProblem {
 	private String description;
 	private ZonedDateTime startTime;
 	private ZonedDateTime endTime;
+	private boolean assigned;
 	
 	public FacilityProblem(String description) {
 		this.description = description;
-		this.startTime = ZonedDateTime.now();
+		startTime = ZonedDateTime.now();
+		assigned = false;
 	}
 	
 	public String getDescription() {
@@ -24,15 +26,31 @@ public class FacilityProblem {
 		return startTime;
 	}
 	
+	public void setStartDate() {
+		this.startTime = ZonedDateTime.now();
+	}
+	
 	public void setStartDate(ZonedDateTime startTime) {
 		this.startTime = startTime;
 	}
 
 	public ZonedDateTime getEndTime() {
-		return endTime;
+		if (endTime == null) {
+			return ZonedDateTime.now();
+		} else {
+			return endTime;
+		}
 	}
 
 	public void setEndTime(ZonedDateTime endTime) {
 		this.endTime = endTime;
+	}
+
+	public boolean isAssigned() {
+		return assigned;
+	}
+
+	public void setAssigned(boolean assigned) {
+		this.assigned = assigned;
 	}
 }

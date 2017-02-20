@@ -2,7 +2,7 @@ package model.maintenance;
 
 public class Worker {
 	private String name;
-	private String wage;
+	private float wage;
 	
 	public String getName() {
 		return name;
@@ -12,11 +12,11 @@ public class Worker {
 		this.name = name;
 	}
 	
-	public String getWage() {
+	public float getWage() {
 		return wage;
 	}
 	
-	public void setWage(String wage) {
+	public void setWage(float wage) {
 		this.wage = wage;
 	}
 }
