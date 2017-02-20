@@ -1,13 +1,14 @@
 package model.use;
 
+import java.util.List;
+
 public interface IFacilityUse {
 
-	public void isInUseDuringInterval(); //choose params and returns 
-	public void assignFacilityToUse(); //choose params and returns 
-	public void vacateFacility(); //choose params and returns 
-	public void listInspections(); //choose params and returns 
-	public void listActualUsage(); //choose params and returns 
-	public void calcUsageRate(); //choose params and returns 
-	public void reserveFacility(); //choose params and returns
+	public boolean isInUseDuringInterval(int startTime, int endTime);
+	public void assignFacilityToUse();
+	public void vacateFacility();
+	public List<?> listInspections();
+	public List<?> listActualUsage();
+	public float calcUsageRate();
 
 }
