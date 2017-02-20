@@ -1,4 +1,4 @@
-package facility;
+package model.facility;
 
 public interface Facility {
 	//public void listFacilitiesInUse ();//choose params and returns 

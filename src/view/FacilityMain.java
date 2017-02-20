@@ -1,6 +1,6 @@
 package view;
-import facility.FacilityInfo;
 import dal.DataAccess;
+import model.facility.FacilityInfo;
 
 public class FacilityMain {
 	public static void main (String args[]){

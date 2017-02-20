@@ -1,7 +1,7 @@
 package dal;
 import java.util.*;
 
-import facility.FacilityInfo;
+import model.facility.FacilityInfo;
 
 public class DataAccess {
 	

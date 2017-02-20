@@ -1,5 +1,5 @@
 
-package facility;
+package model.facility;
 import java.awt.List;
 import java.util.ArrayList;
 

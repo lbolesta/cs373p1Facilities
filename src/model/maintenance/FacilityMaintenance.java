@@ -1,4 +1,4 @@
-package facilityMaint;
+package model.maintenance;
 
 public interface FacilityMaintenance {
 
