@@ -1,6 +1,6 @@
 package model.use;
 
-public interface FacilityUse {
+public interface IFacilityUse {
 
 	public void isInUseDuringInterval(); //choose params and returns 
 	public void assignFacilityToUse(); //choose params and returns 
