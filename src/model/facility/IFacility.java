@@ -2,11 +2,11 @@ package model.facility;
 
 import java.util.List;
 
-public interface IFacility {
-	public List<?> listFacilities();
-	public Object getFacilityInformation();
+public interface IFacility<T> {
+	public List<IFacility<T>> listFacilities();
+	public T getFacilityInformation();
 	public int requestAvailableCapacity();
-	public void addNewFacility(IFacility f);
-	public void addNewFacilityDetail(Object param, String detail);
-	public void removeFacility();
+	public void addNewFacility(IFacility<T> facility);
+	public void addNewFacilityDetail(String detail);
+	public void removeFacility(IFacility<T> facility);
 }
