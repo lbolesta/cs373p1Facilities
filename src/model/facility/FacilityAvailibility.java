@@ -1,4 +1,4 @@
-package facility;
+package model.facility;
 
 public abstract class FacilityAvailibility implements Availibility{
 	

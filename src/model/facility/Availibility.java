@@ -1,4 +1,4 @@
-package facility;
+package model.facility;
 
 public interface Availibility {
 	public void listAvailable();

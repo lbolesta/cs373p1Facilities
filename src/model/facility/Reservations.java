@@ -1,8 +1,6 @@
-package facilityMaint;
-import facility.Availibility;
-import facility.FacilityAvailibility;
+package model.facility;
 
-public class MaintenanceRequest extends FacilityAvailibility {
+public class Reservations extends FacilityAvailibility {
 
 	@Override
 	public void assignFacilityToUse() {
