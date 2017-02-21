@@ -4,11 +4,11 @@ import java.time.ZonedDateTime;
 
 public class MaintRequest {
 	private FacilityProblem facilityProblem;
-	private ZonedDateTime requestDate;
+	private ZonedDateTime requestTime;
 	
 	public MaintRequest(String description) {
-		this.facilityProblem = new FacilityProblem(description);
-		this.requestDate = ZonedDateTime.now();
+		this.facilityProblem = new FacilityProblem(description, requestTime);
+		this.requestTime = ZonedDateTime.now();
 	}
 	
 	public FacilityProblem getFacilityProblem() {
@@ -19,12 +19,12 @@ public class MaintRequest {
 		this.facilityProblem = facilityProblem;
 	}
 
-	public ZonedDateTime getRequestDate() {
-		return requestDate;
+	public ZonedDateTime getRequestTime() {
+		return requestTime;
 	}
 
-	public void setRequestDate(ZonedDateTime requestDate) {
-		this.requestDate = requestDate;
+	public void setRequestTime(ZonedDateTime requestDate) {
+		this.requestTime = requestDate;
 	}
 	
 	

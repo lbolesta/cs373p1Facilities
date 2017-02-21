@@ -6,6 +6,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import main.model.maintenance.Worker;
+
 public class WorkerTest {
 
 	@Before
@@ -17,23 +19,21 @@ public class WorkerTest {
 	}
 
 	@Test
-	public void testGetName() {
-		fail("Not yet implemented");
+	public void testGetAndSetName() {
+		final Worker worker = new Worker();
+		assertEquals(worker.getName(), null);
+		worker.setName("Bill");
+		assertEquals(worker.getName(),"Bill");
+		worker.setName("Bob");
+		assertEquals(worker.getName(), "Bob");
 	}
 
 	@Test
-	public void testSetName() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testGetWage() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testSetWage() {
-		fail("Not yet implemented");
+	public void testGetAndSetWage() {
+		final Worker worker = new Worker();
+		assertEquals(worker.getWage(), 0, 0);
+		worker.setWage(8.25);
+		assertEquals(worker.getWage(),8.25,0);
 	}
 
 }

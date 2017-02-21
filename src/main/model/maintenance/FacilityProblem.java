@@ -8,9 +8,9 @@ public class FacilityProblem {
 	private ZonedDateTime endTime;
 	private boolean assigned;
 	
-	public FacilityProblem(String description) {
+	public FacilityProblem(String description, ZonedDateTime startTime){
 		this.description = description;
-		startTime = ZonedDateTime.now();
+		this.startTime = startTime;
 		assigned = false;
 	}
 	
@@ -26,12 +26,12 @@ public class FacilityProblem {
 		return startTime;
 	}
 	
-	public void setStartDate() {
-		this.startTime = ZonedDateTime.now();
-	}
-	
-	public void setStartDate(ZonedDateTime startTime) {
-		this.startTime = startTime;
+	public boolean setStartTime(ZonedDateTime startTime) {
+		if(endTime == null || startTime.isBefore(endTime)) {
+			this.startTime = startTime;
+			return true;
+		}
+		return false;
 	}
 
 	public ZonedDateTime getEndTime() {
@@ -42,8 +42,12 @@ public class FacilityProblem {
 		}
 	}
 
-	public void setEndTime(ZonedDateTime endTime) {
-		this.endTime = endTime;
+	public boolean setEndTime(ZonedDateTime endTime) {
+		if(endTime.isAfter(startTime)){
+			this.endTime = endTime;
+			return true;
+		}
+		return false;
 	}
 
 	public boolean isAssigned() {

@@ -2,7 +2,17 @@ package main.model.maintenance;
 
 public class Material {
 	private String name;
-	private float cost;
+	private double cost;
+	
+	public Material(){
+		name = "";
+		cost = 0;
+	}
+	
+	public Material(String name, double cost) {
+		this.name = name;
+		this.cost = cost;
+	}
 	
 	public String getName() {
 		return name;
@@ -12,11 +22,11 @@ public class Material {
 		this.name = name;
 	}
 	
-	public float getCost() {
+	public double getCost() {
 		return cost;
 	}
 	
-	public void setCost(float cost) {
+	public void setCost(double cost) {
 		this.cost = cost;
 	}
 }

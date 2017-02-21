@@ -2,6 +2,7 @@ package main.model.maintenance;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MaintenanceService implements IFacilityMaintenance<MaintRequest, MaintOrder, FacilityProblem> {
@@ -9,6 +10,12 @@ public class MaintenanceService implements IFacilityMaintenance<MaintRequest, Ma
 	private List<MaintRequest> requests;
 	private List<MaintOrder> orders;
 	private List<FacilityProblem> problems;
+	
+	public MaintenanceService() {
+		requests = new ArrayList<MaintRequest>();
+		orders = new ArrayList<MaintOrder>();
+		problems = new ArrayList<FacilityProblem>();
+	}
 	
 	@Override
 	public void makeFacilityMaintRequest(String description) {
@@ -19,10 +26,7 @@ public class MaintenanceService implements IFacilityMaintenance<MaintRequest, Ma
 	@Override
 	public void scheduleMaintenance(MaintRequest request, ZonedDateTime startTime, ZonedDateTime endTime) {
 		FacilityProblem problem = request.getFacilityProblem();
-		MaintOrder order = new MaintOrder();
-		order.setFacilityProblem(problem);
-		order.setStartTime(startTime);
-		order.setEndTime(endTime);
+		MaintOrder order = new MaintOrder(problem, startTime, endTime);
 		orders.add(order);
 	}
 
@@ -54,7 +58,6 @@ public class MaintenanceService implements IFacilityMaintenance<MaintRequest, Ma
 				Duration d = Duration.between(since, problem.getEndTime());
 				downTime += d.toHours();
 			}
-			
 		}
 		return downTime/total;
 	}

@@ -6,7 +6,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import main.model.maintenance.MaintRequest;
+import main.model.maintenance.MaintenanceService;
+
 public class MaintenanceServiceTest {
+	
+	MaintenanceService defaultMaintenanceService = new MaintenanceService();
+	MaintRequest defaultRequest = new MaintRequest("replace lightbulb");
 
 	@Before
 	public void setUp() throws Exception {
@@ -18,12 +24,17 @@ public class MaintenanceServiceTest {
 
 	@Test
 	public void testMakeFacilityMaintRequest() {
-		fail("Not yet implemented");
+		MaintenanceService maint = defaultMaintenanceService;
+		assertTrue(maint.listMaintRequests().isEmpty());
+		maint.makeFacilityMaintRequest("replace lightbulb");
+		assertFalse(maint.listMaintRequests().isEmpty());
 	}
 
 	@Test
 	public void testScheduleMaintenance() {
-		fail("Not yet implemented");
+		MaintenanceService maint = defaultMaintenanceService;
+		maint.makeFacilityMaintRequest("replace lightbulb");
+		
 	}
 
 	@Test
@@ -38,11 +49,6 @@ public class MaintenanceServiceTest {
 
 	@Test
 	public void testCalcDownTimeForFacility() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testListMaintRequests() {
 		fail("Not yet implemented");
 	}
 
