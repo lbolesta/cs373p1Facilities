@@ -49,7 +49,7 @@ public class MaintOrder {
 	}
 
 	public boolean setStartTime(ZonedDateTime startTime) {
-		if(startTime.isBefore(this.endTime)){
+		if(endTime == null || startTime.isBefore(endTime)){
 			this.startTime = startTime;
 			return true;
 		}
@@ -61,7 +61,7 @@ public class MaintOrder {
 	}
 
 	public boolean setEndTime(ZonedDateTime endTime) {
-		if(endTime.isAfter(this.startTime)){
+		if(startTime == null || endTime.isAfter(startTime)){
 			this.endTime = endTime;
 			return true;
 		}

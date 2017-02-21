@@ -31,14 +31,12 @@ public class FacilityMain {
 		
 		MaintRequest m = new MaintRequest("Lights flicker in Lewis 238");
 		System.out.println("Request Made");
-		m.setRequestDate(ZonedDateTime.now());
-		System.out.println("Maintenance Request Date: " + m.getRequestDate() + "\n");
+		m.setRequestTime(ZonedDateTime.now().minusDays(1).minusHours(1));
+		System.out.println("Maintenance Request Date: " + m.getRequestTime() + "\n");
 		
-		FacilityProblem f = new FacilityProblem("Lightbulbs need changing");
-		System.out.println("Facility problem: " + f.getDescription());
+		System.out.println("Facility problem: " + m.getFacilityProblem().getDescription());
 		
-		MaintOrder mo = new MaintOrder();
-		mo.setFacilityProblem(f);
+		MaintOrder mo = new MaintOrder(m.getFacilityProblem(), ZonedDateTime.now().minusDays(1), ZonedDateTime.now().minusDays(1).plusHours(1));
 		System.out.println("Logged Problem: " + mo.getFacilityProblem().getDescription() + "\n");
 		
 		ArrayList<String> detailTwo = new ArrayList<>();

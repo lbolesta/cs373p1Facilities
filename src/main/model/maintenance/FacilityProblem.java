@@ -43,7 +43,7 @@ public class FacilityProblem {
 	}
 
 	public boolean setEndTime(ZonedDateTime endTime) {
-		if(endTime.isAfter(startTime)){
+		if(startTime == null || endTime.isAfter(startTime)){
 			this.endTime = endTime;
 			return true;
 		}

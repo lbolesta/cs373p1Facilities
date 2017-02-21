@@ -2,12 +2,22 @@ package main.model.use;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
+
+import main.model.maintenance.FacilityProblem;
+import main.model.maintenance.MaintOrder;
+import main.model.maintenance.MaintRequest;
 
 public class UsageService implements IFacilityUse<Reservation, Inspection> {
 	
 	private List<Reservation> reservations;
 	private List<Inspection> inspections;
+	
+	public UsageService() {
+		reservations = new ArrayList<Reservation>();
+		inspections = new ArrayList<Inspection>();
+	}
 
 	@Override
 	public boolean isInUseDuringInterval(ZonedDateTime startTime, ZonedDateTime endTime) {
