@@ -9,8 +9,7 @@ public class Room extends Facility {
 
 	private List<IFacility<UnitInfo>> subunits;
 	private UnitInfo info;
-	private MaintenanceClient maint;
-	private UsageClient usage;
+	private ScheduleManager schedule;
 	
 	@Override
 	public List<IFacility<UnitInfo>> listFacilities() {
@@ -29,15 +28,9 @@ public class Room extends Facility {
 	public UnitInfo getInfo() {
 		return info;
 	}
-
+	
 	@Override
-	public MaintenanceClient getMaintenanceClient() {
-		return maint;
+	public ScheduleManager getScheduleManager() {
+		return schedule;
 	}
-
-	@Override
-	public UsageClient getUsageClient() {
-		return usage;
-	}
-
 }

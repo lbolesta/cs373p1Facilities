@@ -9,8 +9,7 @@ public class Building extends Facility {
 	
 	private List<IFacility<UnitInfo>> subunits;
 	private UnitInfo info;
-	private MaintenanceClient maint;
-	private UsageClient usage;
+	private ScheduleManager schedule;
 
 	@Override
 	public UnitInfo getInfo() {
@@ -18,8 +17,8 @@ public class Building extends Facility {
 	}
 
 	@Override
-	public MaintenanceClient getMaintenanceClient() {
-		return maint;
+	public ScheduleManager getScheduleManager() {
+		return schedule;
 	}
 
 	@Override
@@ -34,11 +33,6 @@ public class Building extends Facility {
 			availableCapacity += subunit.requestAvailableCapacity();
 		}
 		return availableCapacity;
-	}
-
-	@Override
-	public UsageClient getUsageClient() {
-		return usage;
 	}
 
 }

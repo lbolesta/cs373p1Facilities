@@ -9,19 +9,18 @@ public class Campus extends Facility {
 
 	private List<IFacility<UnitInfo>> subunits;
 	private UnitInfo info;
-	private MaintenanceClient maint;
-	private UsageClient usage;
+	private ScheduleManager schedule;
 
 	@Override
 	public UnitInfo getInfo() {
 		return info;
 	}
-
+	
 	@Override
-	public MaintenanceClient getMaintenanceClient() {
-		return maint;
+	public ScheduleManager getScheduleManager() {
+		return schedule;
 	}
-
+	
 	@Override
 	public List<IFacility<UnitInfo>> listFacilities() {
 		return subunits;
@@ -35,10 +34,4 @@ public class Campus extends Facility {
 		}
 		return availableCapacity;
 	}
-
-	@Override
-	public UsageClient getUsageClient() {
-		return usage;
-	}
-
 }
