@@ -54,9 +54,7 @@ public class FacilityMain {
 		b.getIdNumber() + "\n" + "Capacity: " +
 		b.getCapacity() + "\n" + "Details: " + p.toString() + "\n" + "\n");
 		
-		UsageService u = new UsageService();
-		u.assignFacilityToUse((ZonedDateTime.parse("2017-02-28T12:30:40Z[America/Chicago]")), 
-				(ZonedDateTime.parse("2017-02-28T14:30:40Z[America/Chicago]")));
-		
+	
+		}
 	}
-}
+

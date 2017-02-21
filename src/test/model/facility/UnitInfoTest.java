@@ -6,6 +6,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import main.model.facility.UnitInfo;
+
 public class UnitInfoTest {
 
 	@Before
@@ -15,7 +17,9 @@ public class UnitInfoTest {
 	@After
 	public void tearDown() throws Exception {
 	}
-
+	
+	
+	
 	@Test
 	public void testGetCapacity() {
 		fail("Not yet implemented");
@@ -23,7 +27,7 @@ public class UnitInfoTest {
 
 	@Test
 	public void testSetCapacity() {
-		fail("Not yet implemented");
+		
 	}
 
 	@Test
