@@ -13,7 +13,6 @@ public class MaintOrder {
 	private List<Worker> workers;
 
 	public MaintOrder() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public FacilityProblem getFacilityProblem() {
