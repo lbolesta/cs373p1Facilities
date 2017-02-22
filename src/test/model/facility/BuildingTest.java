@@ -1,6 +1,7 @@
 package test.model.facility;
 
 import static org.junit.Assert.*;
+import main.model.facility.Building;
 
 import org.junit.After;
 import org.junit.Before;
@@ -11,7 +12,7 @@ import main.model.facility.*;
 public class BuildingTest {
 	Building defaultBuilding = new Building();
 	ScheduleManager defaultSchedule = new ScheduleManager();
-	
+
 	@Before
 	public void setUp() throws Exception {
 	}
@@ -64,3 +65,4 @@ public class BuildingTest {
 	}
 
 }
+

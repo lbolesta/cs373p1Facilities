@@ -32,6 +32,7 @@ public class UnitInfoTest {
 	}
 
 
+
 	@Test
 	public void testGetNameAndSetName() {
 		UnitInfo b = defaultUnitInfo;

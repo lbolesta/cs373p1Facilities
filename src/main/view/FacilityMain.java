@@ -56,6 +56,7 @@ public class FacilityMain {
 		b.getIdNumber() + "\n" + "Capacity: " +
 		b.getCapacity() + "\n" + "Details: " + p.toString() + "\n" + "\n");
 		
+
 		System.out.println("Insert User...");
 		User user = new User();
 		user.setName("Lauren");
