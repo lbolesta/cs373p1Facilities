@@ -1,7 +1,7 @@
 
 package main.view;
 import java.awt.List;
-
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.*;
@@ -18,6 +18,7 @@ public class FacilityMain {
 		detail.add("Needs admin approval");
 		detail.add("Downtown Campus");
 		
+		System.out.println("Insert Facility...");
 		UnitInfo a = new UnitInfo();
 		a.setName("Lewis Towers");
 		a.setIdNumber(1);
@@ -43,6 +44,7 @@ public class FacilityMain {
 		detailTwo.add("Reservations Allowed");
 		detailTwo.add("Lake Shore Campus");
 		
+		System.out.println("Insert Facility...");
 		UnitInfo b = new UnitInfo();
 		b.setName("IC");
 		b.setIdNumber(2);
@@ -54,9 +56,23 @@ public class FacilityMain {
 		b.getIdNumber() + "\n" + "Capacity: " +
 		b.getCapacity() + "\n" + "Details: " + p.toString() + "\n" + "\n");
 		
-		UsageService u = new UsageService();
-		u.assignFacilityToUse((ZonedDateTime.parse("2017-02-28T12:30:40Z[America/Chicago]")), 
-				(ZonedDateTime.parse("2017-02-28T14:30:40Z[America/Chicago]")));
+		System.out.println("Insert User...");
+		User user = new User();
+		user.setName("Lauren");
+		user.setIdNumber(2);
+		System.out.println("User Name: " + user.getName() + "\n" + "User ID: " + user.getIdNumber() + "\n");
 		
+		
+		ZonedDateTime start = ZonedDateTime.of(2016, 3, 1, 8, 0, 0, 0, ZoneId.systemDefault());
+		ZonedDateTime end = ZonedDateTime.of(2016, 3, 1, 10, 0, 0, 0, ZoneId.systemDefault());
+		Reservation res = new Reservation();
+		res.setUser(user);
+		System.out.println("Reservation under: " + user.getName() + ", " + 
+		"ID Number: " + user.getIdNumber());
+		res.setStartTime(start);
+		res.setEndTime(end);
+		System.out.println("Start Time: " + start + "\n" + "End Time: " + end);
+		
+		}
 	}
-}
+
