@@ -24,11 +24,19 @@ public class FacilityMain {
 		a.setIdNumber(1);
 		a.setCapacity(300);
 		a.setDetails(detail);
+		System.out.println("adding a single detail to already established list (details list) \n");
+		a.addDetail("Single added detail");//add a new detail
 		ArrayList<String> x = (ArrayList<String>) a.getDetails();
+		
 	
 		System.out.println("Name: " +a.getName() + "\n" + "ID Number: " + 
 		a.getIdNumber() + "\n" + "Capacity: " +
 		a.getCapacity() + "\n" + "Details: " + x.toString() + "\n");
+		
+		System.out.println("Removing 'Single added detail' ");
+		a.removeDetail("Single added detail");
+		System.out.println("List reprinted with detail removed ");
+		System.out.println("Details: " + x.toString() + "\n");
 		
 		MaintRequest m = new MaintRequest("Lights flicker in Lewis 238");
 		System.out.println("Request Made");
