@@ -5,57 +5,65 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MaintenanceService implements IFacilityMaintenance<MaintRequest, MaintOrder, FacilityProblem> {
+public class MaintenanceService implements IFacilityMaintenance<MaintTicket> {
 
-	private List<MaintRequest> requests;
-	private List<MaintOrder> orders;
-	private List<FacilityProblem> problems;
+	private List<MaintTicket> tickets;
 	
 	public MaintenanceService() {
-		requests = new ArrayList<MaintRequest>();
-		orders = new ArrayList<MaintOrder>();
-		problems = new ArrayList<FacilityProblem>();
+		tickets = new ArrayList<MaintTicket>();
 	}
 	
 	@Override
-	public void makeFacilityMaintRequest(String description) {
-		MaintRequest request = new MaintRequest(description);
-		requests.add(request);
+	public void makeFacilityMaintRequest(String description, ZonedDateTime start) {
+		MaintTicket ticket = new MaintTicket(description, start);
+		tickets.add(ticket);
+	}
+	
+	public MaintTicket getMaintTicket(String description) {
+		for (MaintTicket t : tickets) {
+			if (t.getState(ZonedDateTime.now()) == "REQUEST" && t.getDescription() == description) {
+				return t;
+			}
+		}
+		return null;
 	}
 
 	@Override
-	public void scheduleMaintenance(MaintRequest request, ZonedDateTime startTime, ZonedDateTime endTime) {
-		FacilityProblem problem = request.getFacilityProblem();
-		MaintOrder order = new MaintOrder(problem, startTime, endTime);
-		orders.add(order);
+	public void scheduleMaintenance(MaintTicket ticket, ZonedDateTime startTime, ZonedDateTime endTime) {
+		ticket.setOrderTime(startTime);
+		ticket.setResolveTime(endTime);
 	}
 
 	@Override
 	public float calcMaintenanceCostForFacility() {
 		float cost = 0;
-		for (MaintOrder order : this.orders) {
-			cost += order.calcCost();
+		for (MaintTicket t : tickets) {
+			cost += t.calcCost();
 		}
 		return cost;
 	}
 
 	@Override
-	public float calcProblemRateForFacility(ZonedDateTime since) {
+	public float calcProblemRateForFacility(ZonedDateTime since, ZonedDateTime til) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public float calcDownTimeForFacility(ZonedDateTime since) {
+	public float calcDownTimeForFacility(ZonedDateTime since, ZonedDateTime til) {
 		float downTime = 0;
-		ZonedDateTime now = ZonedDateTime.now();
-		float total = (Duration.between(since, now)).toHours();
-		for (FacilityProblem problem : listFacilityProblems()) {
-			if(problem.getStartTime().isAfter(since)){
-				Duration d = Duration.between(problem.getStartTime(), problem.getEndTime());
-				downTime += d.toHours();
-			} else if (problem.getEndTime().isAfter(since)){
-				Duration d = Duration.between(since, problem.getEndTime());
+		float total = (Duration.between(since, til)).toHours();
+		for (MaintTicket t : tickets) {
+			if(t.getRequestTime().isAfter(since)) {
+				if (!t.getResolveTime().isAfter(til)) {
+					Duration d = Duration.between(t.getRequestTime(), t.getResolveTime());
+					downTime += d.toHours();
+				} else {
+					Duration d = Duration.between(t.getRequestTime(), til);
+					downTime += d.toHours();
+				}
+			} else if (!t.getResolveTime().isBefore(since)){
+				Duration d = Duration.between(since, t.getResolveTime());
 				downTime += d.toHours();
 			}
 		}
@@ -63,22 +71,33 @@ public class MaintenanceService implements IFacilityMaintenance<MaintRequest, Ma
 	}
 
 	@Override
-	public List<MaintRequest> listMaintRequests() {
+	public List<MaintTicket> listMaintRequests() {
+		List<MaintTicket> requests = new ArrayList<MaintTicket>();
+		for (MaintTicket t : tickets) {
+			if (t.getState(ZonedDateTime.now()) == "REQUEST") {
+				requests.add(t);
+			}
+		}
 		return requests;
 	}
 
 	@Override
-	public List<MaintOrder> listMaintenance() {
+	public List<MaintTicket> listMaintenance() {
+		List<MaintTicket> orders = new ArrayList<MaintTicket>();
+		for (MaintTicket t : tickets) {
+			if (t.getState(ZonedDateTime.now()) == "ORDER" || t.getState(ZonedDateTime.now()) == "RESOLVED") {
+				orders.add(t);
+			}
+		}
 		return orders;
 	}
 
 	@Override
-	public List<FacilityProblem> listFacilityProblems() {
-		for (MaintRequest request : requests) {
-			FacilityProblem problem = request.getFacilityProblem();
-			if (!problems.contains(problem)) {
-				problems.add(problem);
-			}
+	public List<String> listFacilityProblems() {
+		List<String> problems = new ArrayList<String>();
+		for (MaintTicket t : tickets) {
+			String problem = t.getDescription();
+			problems.add(problem);
 		}
 		return problems;
 	}

@@ -3,17 +3,15 @@ package main.model.facility;
 import java.time.ZonedDateTime;
 import java.util.List;
 
-import main.model.maintenance.FacilityProblem;
 import main.model.maintenance.IFacilityMaintenance;
-import main.model.maintenance.MaintOrder;
-import main.model.maintenance.MaintRequest;
+import main.model.maintenance.MaintTicket;
 import main.model.maintenance.MaintenanceService;
 import main.model.use.IFacilityUse;
 import main.model.use.Inspection;
 import main.model.use.Reservation;
 import main.model.use.UsageService;
 
-public class ScheduleManager implements IFacilityMaintenance<MaintRequest, MaintOrder, FacilityProblem>, IFacilityUse<Reservation, Inspection> {
+public class ScheduleManager implements IFacilityMaintenance<MaintTicket>, IFacilityUse<Reservation, Inspection> {
 	private MaintenanceService maint;
 	private UsageService usage;
 	
@@ -34,19 +32,21 @@ public class ScheduleManager implements IFacilityMaintenance<MaintRequest, Maint
 	}
 	
 	@Override
-	public void makeFacilityMaintRequest(String description) {
-		maint.makeFacilityMaintRequest(description);
+	public void makeFacilityMaintRequest(String description, ZonedDateTime start) {
+		maint.makeFacilityMaintRequest(description, start);
 	}
 	
 	@Override
-	public void scheduleMaintenance(MaintRequest request, ZonedDateTime startTime, ZonedDateTime endTime) {
-		if(isInUseDuringInterval(startTime, endTime) && !isUnderMaintenance(startTime, endTime)) {
-			vacateFacility(startTime, endTime);
-			maint.scheduleMaintenance(request, startTime, endTime);
-			usage.assignFacilityToUse(startTime, endTime);
-		} else {
+	public void scheduleMaintenance(MaintTicket ticket, ZonedDateTime startTime, ZonedDateTime endTime) {
+		if(isUnderMaintenance(startTime, endTime)) {
 			System.console().printf("Maintenance order conflicts with existing maintenance.");
+			return;
 		}
+		else if(isInUseDuringInterval(startTime, endTime) && !isUnderMaintenance(startTime, endTime)) {
+			vacateFacility(startTime, endTime);
+		}
+		maint.scheduleMaintenance(ticket, startTime, endTime);
+		usage.assignFacilityToUse(startTime, endTime);
 	}
 	
 	@Override
@@ -54,23 +54,23 @@ public class ScheduleManager implements IFacilityMaintenance<MaintRequest, Maint
 		return maint.calcMaintenanceCostForFacility();
 	}
 	@Override
-	public float calcProblemRateForFacility(ZonedDateTime since) {
-		return maint.calcProblemRateForFacility(since);
+	public float calcProblemRateForFacility(ZonedDateTime since, ZonedDateTime til) {
+		return maint.calcProblemRateForFacility(since, til);
 	}
 	@Override
-	public float calcDownTimeForFacility(ZonedDateTime since) {
-		return maint.calcDownTimeForFacility(since);
+	public float calcDownTimeForFacility(ZonedDateTime since, ZonedDateTime til) {
+		return maint.calcDownTimeForFacility(since, til);
 	}
 	@Override
-	public List<MaintRequest> listMaintRequests() {
+	public List<MaintTicket> listMaintRequests() {
 		return maint.listMaintRequests();
 	}
 	@Override
-	public List<MaintOrder> listMaintenance() {
+	public List<MaintTicket> listMaintenance() {
 		return maint.listMaintenance();
 	}
 	@Override
-	public List<FacilityProblem> listFacilityProblems() {
+	public List<String> listFacilityProblems() {
 		return maint.listFacilityProblems();
 	}
 	@Override
@@ -101,9 +101,9 @@ public class ScheduleManager implements IFacilityMaintenance<MaintRequest, Maint
 	public boolean isUnderMaintenance(ZonedDateTime startTime, ZonedDateTime endTime) {
 		boolean underMaint = false;
 		while (!underMaint){
-			for (MaintOrder order : listMaintenance()) {
-				ZonedDateTime oStart = order.getStartTime();
-				ZonedDateTime oEnd = order.getEndTime();
+			for (MaintTicket order : listMaintenance()) {
+				ZonedDateTime oStart = order.getOrderTime();
+				ZonedDateTime oEnd = order.getResolveTime();
 				underMaint = (oStart.isBefore(startTime) && oEnd.isAfter(startTime)) || (oStart.isBefore(endTime) && oEnd.isAfter(endTime));
 			}
 		}
