@@ -5,7 +5,6 @@ public class Material {
 	private double cost;
 	
 	public Material(){
-		name = "";
 		cost = 0;
 	}
 	

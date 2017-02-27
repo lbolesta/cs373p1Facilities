@@ -19,8 +19,6 @@ public class UnitInfoTest {
 	public void tearDown() throws Exception {
 	}
 	
-	
-	
 	@Test
 	public void testGetCapacityAndSetCapacity() {
 		UnitInfo a = defaultUnitInfo;
@@ -31,8 +29,6 @@ public class UnitInfoTest {
 		assertEquals(a.getCapacity(), 20);
 	}
 
-
-
 	@Test
 	public void testGetNameAndSetName() {
 		UnitInfo b = defaultUnitInfo;
@@ -42,7 +38,6 @@ public class UnitInfoTest {
 		b.setName("IC");
 		assertEquals(b.getName(), "IC");
 	}
-
 	
 	@Test
 	public void testGetIdNumberAndSetIdNumber() {
@@ -53,8 +48,6 @@ public class UnitInfoTest {
 		c.setIdNumber(2);
 		assertEquals(c.getIdNumber(), 2);
 	}
-
-	
 
 	@Test
 	public void testGetDetails() {

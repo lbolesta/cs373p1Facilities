@@ -5,10 +5,6 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.model.maintenance.FacilityProblem;
-import main.model.maintenance.MaintOrder;
-import main.model.maintenance.MaintRequest;
-
 public class UsageService implements IFacilityUse<Reservation, Inspection> {
 	
 	private List<Reservation> reservations;
@@ -33,12 +29,10 @@ public class UsageService implements IFacilityUse<Reservation, Inspection> {
 	}
 
 	@Override
-	public boolean assignFacilityToUse(ZonedDateTime startTime, ZonedDateTime endTime) {
+	public boolean assignFacilityToUse(ZonedDateTime startTime, ZonedDateTime endTime, User user) {
 		boolean inUse = isInUseDuringInterval(startTime, endTime);
 		if(!inUse){
-			Reservation reservation = new Reservation();
-			reservation.setStartTime(startTime);
-			reservation.setEndTime(endTime);
+			Reservation reservation = new Reservation(startTime, endTime, user);
 			this.addReservation(reservation);
 		}
 		return !inUse;

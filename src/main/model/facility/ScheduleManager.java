@@ -10,10 +10,12 @@ import main.model.use.IFacilityUse;
 import main.model.use.Inspection;
 import main.model.use.Reservation;
 import main.model.use.UsageService;
+import main.model.use.User;
 
 public class ScheduleManager implements IFacilityMaintenance<MaintTicket>, IFacilityUse<Reservation, Inspection> {
 	private MaintenanceService maint;
 	private UsageService usage;
+	private User maintUser = new User("Maintenance");
 	
 	public MaintenanceService getMaint() {
 		return maint;
@@ -46,7 +48,7 @@ public class ScheduleManager implements IFacilityMaintenance<MaintTicket>, IFaci
 			vacateFacility(startTime, endTime);
 		}
 		maint.scheduleMaintenance(ticket, startTime, endTime);
-		usage.assignFacilityToUse(startTime, endTime);
+		usage.assignFacilityToUse(startTime, endTime, maintUser);
 	}
 	
 	@Override
@@ -78,8 +80,8 @@ public class ScheduleManager implements IFacilityMaintenance<MaintTicket>, IFaci
 		return usage.isInUseDuringInterval(startTime, endTime);
 	}
 	@Override
-	public boolean assignFacilityToUse(ZonedDateTime startTime, ZonedDateTime endTime) {
-		return usage.assignFacilityToUse(startTime, endTime);
+	public boolean assignFacilityToUse(ZonedDateTime startTime, ZonedDateTime endTime, User user) {
+		return usage.assignFacilityToUse(startTime, endTime, user);
 	}
 	@Override
 	public void vacateFacility(ZonedDateTime startTime, ZonedDateTime endTime) {

@@ -5,7 +5,6 @@ public class Worker {
 	private double wage;
 	
 	public Worker(){
-		name = "";
 		wage = 0;
 	}
 	

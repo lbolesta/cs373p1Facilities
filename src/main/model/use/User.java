@@ -4,6 +4,11 @@ public class User {
 	private String name;
 	private int idNumber;
 	
+	public User(String name){
+		this.name = name;
+		this.setIdNumber();
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -16,7 +21,8 @@ public class User {
 		return idNumber;
 	}
 
-	public void setIdNumber(int idNumber) {
-		this.idNumber = idNumber;
+	// TODO: generate unique ID number for each new user
+	private void setIdNumber() {
+		idNumber = -1;
 	}
 }

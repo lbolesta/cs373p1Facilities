@@ -21,7 +21,7 @@ public class MaterialTest {
 	@Test
 	public void testGetAndSetName() {
 		final Material material = new Material();
-		assertEquals(material.getName(), null);
+		assertNull(material.getName());
 		material.setName("rock");
 		assertEquals(material.getName(),"rock");
 	}

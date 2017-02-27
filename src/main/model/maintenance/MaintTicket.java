@@ -25,14 +25,14 @@ public class MaintTicket {
 	}
 	
 	private boolean isBefore(ZonedDateTime a, ZonedDateTime b){
-		return (a == null || b == null || a.isBefore(b) );
+		return (a != null && (b == null || a.isBefore(b)) );
 	}
 	
 	public String getState(ZonedDateTime relativeTime) {
 		String state = "";
 		if (orderTime == null) {
 			state = "REQUEST";
-		} else if (orderTime != null){
+		} else if (orderTime != null && isBefore(relativeTime, resolveTime)){
 			state = "ORDER";
 		} else if (isBefore(resolveTime, relativeTime)){
 			state = "RESOLVED";
@@ -65,7 +65,7 @@ public class MaintTicket {
 	}
 
 	public boolean setRequestTime(ZonedDateTime requestTime) {
-		if (checkTime(requestTime, orderTime, resolveTime)) {
+		if (orderTime == null || checkTime(requestTime, orderTime, resolveTime)) {
 			this.requestTime = requestTime;
 			return true;
 		}

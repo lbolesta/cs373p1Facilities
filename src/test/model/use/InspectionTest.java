@@ -14,10 +14,10 @@ import main.model.use.Inspection;
 
 public class InspectionTest {
 	
-	ZonedDateTime defaultDate = ZonedDateTime.of(2017, 3, 1, 8, 0, 0, 0, ZoneId.systemDefault());
-	String defaultDescription = "Water Inspection";
-	String defaultDescription2 = "Gas inspection";
-	Inspection defaultInspection = new Inspection();
+	final ZonedDateTime defaultDate = ZonedDateTime.of(2017, 3, 1, 8, 0, 0, 0, ZoneId.systemDefault());
+	final String defaultDescription = "Water Inspection";
+	final String defaultDescription2 = "Gas inspection";
+	final Inspection defaultInspection = new Inspection(defaultDescription, defaultDate);
 
 	@Before
 	public void setUp() throws Exception {
@@ -28,10 +28,8 @@ public class InspectionTest {
 	}
 
 	@Test
-	public void testGetDateAndSetDescription() {
+	public void testGetAndSetDescription() {
 		Inspection a = defaultInspection;
-		assertEquals(a.getDescription(), null);
-		a.setDescription(defaultDescription);
 		assertEquals(a.getDescription(), defaultDescription);
 		a.setDescription(defaultDescription2);
 		assertEquals(a.getDescription(), defaultDescription2);
@@ -39,12 +37,11 @@ public class InspectionTest {
 
 	
 	@Test
-	public void testGetDateAndSetDate() {
-		Inspection b = defaultInspection; 
-		assertEquals(b.getDate(), null);
-		b.setDate(defaultDate);
-		assertNotEquals(b.getDate(), ZonedDateTime.now());
+	public void testGetAndSetDate() {
+		Inspection b = defaultInspection;
 		assertEquals(b.getDate(), defaultDate);
+		b.setDate(b.getDate().plusDays(1));
+		assertEquals(b.getDate(), defaultDate.plusDays(1));
 	}
 
 

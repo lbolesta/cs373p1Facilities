@@ -6,6 +6,11 @@ public class Inspection {
 	private ZonedDateTime date;
 	private String description;
 	
+	public Inspection(String description, ZonedDateTime date) {
+		this.description = description;
+		this.date = date;
+	}
+	
 	public ZonedDateTime getDate() {
 		return date;
 	}
