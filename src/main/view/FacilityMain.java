@@ -13,74 +13,66 @@ import main.model.use.*;
 
 public class FacilityMain {
 	public static void main (String args[]){
-	
-		/*ArrayList<String> detail = new ArrayList<>();
-		detail.add("Needs admin approval");
-		detail.add("Downtown Campus");
+		ZonedDateTime start = ZonedDateTime.of(2017, 3, 5, 8, 0, 0, 0, ZoneId.systemDefault());
+		ZonedDateTime end = ZonedDateTime.of(2017, 3, 5, 10, 0, 0, 0, ZoneId.systemDefault());
+		ZonedDateTime AssignUseStart = ZonedDateTime.of(2017, 3, 10, 10, 0, 0, 0, ZoneId.systemDefault());
+		ZonedDateTime AssignUseEnd = ZonedDateTime.of(2017, 3, 5, 15, 0, 0, 0, ZoneId.systemDefault());
+		ZonedDateTime defaultStart = ZonedDateTime.of(2017, 10, 5, 10, 0, 0, 0, ZoneId.systemDefault());
+		ZonedDateTime defaultEnd = ZonedDateTime.of(2017, 10, 5, 15, 0, 0, 0, ZoneId.systemDefault());
+		User Joe = new User("Joe");
+		MaintTicket m = new MaintTicket("Sink will be fixed", ZonedDateTime.of(2017, 3, 5, 8, 0, 0, 0, ZoneId.systemDefault()));
 		
-		System.out.println("Insert Facility...");
-		UnitInfo a = new UnitInfo();
-		a.setName("Lewis Towers");
-		a.setIdNumber(1);
-		a.setCapacity(300);
-		a.setDetails(detail);
-		System.out.println("adding a single detail to already established list (details list) \n");
-		a.addDetail("Single added detail");//add a new detail
-		ArrayList<String> x = (ArrayList<String>) a.getDetails();
+		ScheduleManager schedule = new ScheduleManager();
 		
-	
-		System.out.println("Name: " +a.getName() + "\n" + "ID Number: " + 
-		a.getIdNumber() + "\n" + "Capacity: " +
-		a.getCapacity() + "\n" + "Details: " + x.toString() + "\n");
+		//make maintenance request
+		schedule.makeFacilityMaintRequest("Fix Sink", ZonedDateTime.of(2017, 3, 1, 8, 0, 0, 0, ZoneId.systemDefault()));
+		System.out.println("Maintenance Request has been made \n");
 		
-		System.out.println("Removing 'Single added detail' ");
-		a.removeDetail("Single added detail");
-		System.out.println("List reprinted with detail removed ");
-		System.out.println("Details: " + x.toString() + "\n");
+		//print maintenance requests
+		System.out.println("Listing maintenence requests:");
+		java.util.List<MaintTicket> print = schedule.listMaintRequests();
+		for (int i = 0; i < print.size(); i++){
+			System.out.println(print.get(i) + "\n");//issue here- printing memory location even though using get metho
+		}
 		
-		MaintRequest m = new MaintRequest("Lights flicker in Lewis 238");
-		System.out.println("Request Made");
-		m.setRequestTime(ZonedDateTime.now().minusDays(1).minusHours(1));
-		System.out.println("Maintenance Request Date: " + m.getRequestTime() + "\n");
+		//schedule maintenance
+		schedule.scheduleMaintenance(m, start, end);
+		System.out.println("Maintenance has been scheduled \n");
 		
-		System.out.println("Facility problem: " + m.getFacilityProblem().getDescription());
+		//print scheduled maintenance
+		System.out.println("Listing scheduled maintenance:");
+		java.util.List<MaintTicket> print2 = schedule.listMaintenance();
+		for (int i = 0; i < print2.size(); i++){
+			System.out.println(print2.get(i) + "\n");
+		}//this is also not printing
 		
-		MaintOrder mo = new MaintOrder(m.getFacilityProblem(), ZonedDateTime.now().minusDays(1), ZonedDateTime.now().minusDays(1).plusHours(1));
-		System.out.println("Logged Problem: " + mo.getFacilityProblem().getDescription() + "\n");
+		//checking if is use
+		boolean l = schedule.isInUseDuringInterval(defaultStart, defaultEnd);
+		if(l == true){
+			System.out.println("Facility is in use");// prints correctly, maintenance scheduling working
+		}
+		else{
+			System.out.println("Facility is not in use");
+		}
 		
-		ArrayList<String> detailTwo = new ArrayList<>();
-		detailTwo.add("Reservations Allowed");
-		detailTwo.add("Lake Shore Campus");
+		//assigning a facility to use
+		schedule.assignFacilityToUse(AssignUseStart, AssignUseEnd, Joe);
+		System.out.println("Facility has been assigned to " + Joe.getName() + "\n");
 		
-		System.out.println("Insert Facility...");
-		UnitInfo b = new UnitInfo();
-		b.setName("IC");
-		b.setIdNumber(2);
-		b.setCapacity(700);
-		b.setDetails(detailTwo);
-		ArrayList<String> p = (ArrayList<String>) b.getDetails();
+		//checking if facility is in use
+		boolean k = schedule.isInUseDuringInterval(AssignUseStart, AssignUseEnd);
+		if(k == true){
+			System.out.println("Facility is in use, assigned to " + Joe.getName());
+		}
+		else{
+			System.out.println("Facility is not in use");//this if else should
+			//print the first statement, Facility is in use because it was assigned
+		}
 		
-		System.out.println("Name: " +b.getName() + "\n" + "ID Number: " + 
-		b.getIdNumber() + "\n" + "Capacity: " +
-		b.getCapacity() + "\n" + "Details: " + p.toString() + "\n" + "\n");
+		//float DT = schedule.calcDownTimeForFacility(start, end);
+		//System.out.println("Down time is: " + DT);
+		//this is throwing a null pointer exception, not sure if issue is method call or with method
 		
-
-		System.out.println("Insert User...");
-		User user = new User();
-		user.setName("Lauren");
-		user.setIdNumber(2);
-		System.out.println("User Name: " + user.getName() + "\n" + "User ID: " + user.getIdNumber() + "\n");
-		
-		
-		ZonedDateTime start = ZonedDateTime.of(2016, 3, 1, 8, 0, 0, 0, ZoneId.systemDefault());
-		ZonedDateTime end = ZonedDateTime.of(2016, 3, 1, 10, 0, 0, 0, ZoneId.systemDefault());
-		Reservation res = new Reservation();
-		res.setUser(user);
-		System.out.println("Reservation under: " + user.getName() + ", " + 
-		"ID Number: " + user.getIdNumber());
-		res.setStartTime(start);
-		res.setEndTime(end);
-		System.out.println("Start Time: " + start + "\n" + "End Time: " + end);*/
 		
 		}
 	}

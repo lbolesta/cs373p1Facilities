@@ -26,17 +26,9 @@ public class ScheduleManager implements IFacilityMaintenance<MaintTicket>, IFaci
 		return maint;
 	}
 	
-	/*public void setMaint(MaintenanceService maint) {
-		this.maint = maint;
-	}*/
-	
 	public UsageService getUsage() {
 		return usage;
 	}
-	
-	/*public void setUsage(UsageService usage) {
-		this.usage = usage;
-	}*/
 	
 	@Override
 	public void makeFacilityMaintRequest(String description, ZonedDateTime start) {
