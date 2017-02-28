@@ -15,23 +15,28 @@ import main.model.use.User;
 public class ScheduleManager implements IFacilityMaintenance<MaintTicket>, IFacilityUse<Reservation, Inspection> {
 	private MaintenanceService maint;
 	private UsageService usage;
-	private User maintUser = new User("Maintenance");
+	private static User maintUser = new User("Maintenance");
+	
+	public ScheduleManager(){
+		maint = new MaintenanceService();
+		usage = new UsageService();
+	}
 	
 	public MaintenanceService getMaint() {
 		return maint;
 	}
 	
-	public void setMaint(MaintenanceService maint) {
+	/*public void setMaint(MaintenanceService maint) {
 		this.maint = maint;
-	}
+	}*/
 	
 	public UsageService getUsage() {
 		return usage;
 	}
 	
-	public void setUsage(UsageService usage) {
+	/*public void setUsage(UsageService usage) {
 		this.usage = usage;
-	}
+	}*/
 	
 	@Override
 	public void makeFacilityMaintRequest(String description, ZonedDateTime start) {
@@ -39,16 +44,16 @@ public class ScheduleManager implements IFacilityMaintenance<MaintTicket>, IFaci
 	}
 	
 	@Override
-	public void scheduleMaintenance(MaintTicket ticket, ZonedDateTime startTime, ZonedDateTime endTime) {
+	public boolean scheduleMaintenance(MaintTicket ticket, ZonedDateTime startTime, ZonedDateTime endTime) {
 		if(isUnderMaintenance(startTime, endTime)) {
-			System.console().printf("Maintenance order conflicts with existing maintenance.");
-			return;
+			return false;
 		}
-		else if(isInUseDuringInterval(startTime, endTime) && !isUnderMaintenance(startTime, endTime)) {
+		else if(isInUseDuringInterval(startTime, endTime)) {
 			vacateFacility(startTime, endTime);
 		}
 		maint.scheduleMaintenance(ticket, startTime, endTime);
 		usage.assignFacilityToUse(startTime, endTime, maintUser);
+		return true;
 	}
 	
 	@Override
@@ -100,16 +105,19 @@ public class ScheduleManager implements IFacilityMaintenance<MaintTicket>, IFaci
 		return usage.calcUsageRate(since, til);
 	}
 	
-	public boolean isUnderMaintenance(ZonedDateTime startTime, ZonedDateTime endTime) {
-		boolean underMaint = false;
-		while (!underMaint){
-			for (MaintTicket order : listMaintenance()) {
-				ZonedDateTime oStart = order.getOrderTime();
-				ZonedDateTime oEnd = order.getResolveTime();
-				underMaint = (oStart.isBefore(startTime) && oEnd.isAfter(startTime)) || (oStart.isBefore(endTime) && oEnd.isAfter(endTime));
+	private boolean isUnderMaintenance(ZonedDateTime startTime, ZonedDateTime endTime) {
+		for (MaintTicket ticket : listMaintenance()) {
+			ZonedDateTime oStart = ticket.getOrderTime();
+			ZonedDateTime oEnd = ticket.getResolveTime();
+			if (startTime.isBefore(oStart) && (endTime.isBefore(oStart) || endTime.isEqual(oStart))) {
+				break;
+			} else if (endTime.isAfter(oEnd) && (startTime.isAfter(oEnd) || startTime.isEqual(oEnd))) {
+				break;
+			} else {
+				return true;
 			}
 		}
-		return underMaint;
+		return false;
 	}
 	
 	

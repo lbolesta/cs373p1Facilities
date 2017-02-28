@@ -2,11 +2,29 @@ package test.model.facility;
 
 import static org.junit.Assert.*;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import main.model.facility.Room;
+import main.model.facility.ScheduleManager;
+import main.model.maintenance.MaintTicket;
+import main.model.use.User;
+import test.model.maintenance.*;
+import test.model.use.*;
+
 public class ScheduleManagerTest {
+	
+	final Room defaultRoom = new Room("711", 40);
+	final ScheduleManager defaultSchedule = defaultRoom.getScheduleManager();
+	final MaintenanceServiceTest maintTest = new MaintenanceServiceTest();
+	final UsageServiceTest useTest = new UsageServiceTest();
+	final ZonedDateTime defaultStartTime = ZonedDateTime.of(2016, 3, 1, 7, 0, 0, 0, ZoneId.systemDefault());
+	final ZonedDateTime defaultEndTime = ZonedDateTime.of(2016, 3, 1, 9, 0, 0, 0, ZoneId.systemDefault());
+	final User defaultUser = new User("Anna");
 
 	@Before
 	public void setUp() throws Exception {
@@ -18,97 +36,92 @@ public class ScheduleManagerTest {
 
 	@Test
 	public void testGetMaint() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testSetMaint() {
-		fail("Not yet implemented");
+		assertNotNull(defaultRoom.getScheduleManager().getMaint());
 	}
 
 	@Test
 	public void testGetUsage() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testSetUsage() {
-		fail("Not yet implemented");
+		assertNotNull(defaultRoom.getScheduleManager().getUsage());
 	}
 
 	@Test
 	public void testMakeFacilityMaintRequest() {
-		fail("Not yet implemented");
+		maintTest.testMakeFacilityMaintRequest();
 	}
 
 	@Test
 	public void testScheduleMaintenance() {
-		fail("Not yet implemented");
+		assertTrue(defaultSchedule.assignFacilityToUse(defaultStartTime, defaultEndTime, defaultUser)); //7-9
+		assertFalse(defaultSchedule.listActualUsage().isEmpty());
+		assertEquals(defaultSchedule.listActualUsage().size(), 1);
+		defaultSchedule.makeFacilityMaintRequest("replace lightbulb", defaultStartTime);
+		MaintTicket ticket = defaultSchedule.getMaint().getMaintTicket("replace lightbulb"); //7
+		assertTrue(defaultSchedule.scheduleMaintenance(ticket, defaultStartTime.plusHours(1), defaultEndTime.plusHours(1))); //8-10
+		assertEquals(defaultSchedule.listActualUsage().size(), 1);
+		assertFalse(defaultSchedule.isInUseDuringInterval(defaultStartTime, defaultStartTime.plusHours(1)));
+		defaultSchedule.makeFacilityMaintRequest("repair wall", defaultStartTime);
+		MaintTicket ticket2 = defaultSchedule.getMaint().getMaintTicket("repair wall");
+		assertFalse(defaultSchedule.scheduleMaintenance(ticket2, defaultStartTime, defaultEndTime));
 	}
 
 	@Test
 	public void testCalcMaintenanceCostForFacility() {
-		fail("Not yet implemented");
+		maintTest.testCalcMaintenanceCostForFacility();
 	}
 
 	@Test
 	public void testCalcProblemRateForFacility() {
-		fail("Not yet implemented");
+		maintTest.testCalcProblemRateForFacility();
 	}
 
 	@Test
 	public void testCalcDownTimeForFacility() {
-		fail("Not yet implemented");
+		maintTest.testCalcDownTimeForFacility();
 	}
 
 	@Test
 	public void testListMaintRequests() {
-		fail("Not yet implemented");
+		maintTest.testListMaintRequests();
 	}
 
 	@Test
 	public void testListMaintenance() {
-		fail("Not yet implemented");
+		maintTest.testListMaintenance();
 	}
 
 	@Test
 	public void testListFacilityProblems() {
-		fail("Not yet implemented");
+		maintTest.testListFacilityProblems();
 	}
 
 	@Test
 	public void testIsInUseDuringInterval() {
-		fail("Not yet implemented");
+		useTest.testIsInUseDuringInterval();
 	}
 
 	@Test
 	public void testAssignFacilityToUse() {
-		fail("Not yet implemented");
+		useTest.testAssignFacilityToUse();
 	}
 
 	@Test
 	public void testVacateFacility() {
-		fail("Not yet implemented");
+		useTest.testVacateFacility();
 	}
 
 	@Test
-	public void testListInspections() {
-		fail("Not yet implemented");
+	public void testListAndAddInspections() {
+		useTest.testListAndAddInspections();
 	}
 
 	@Test
 	public void testListActualUsage() {
-		fail("Not yet implemented");
+		useTest.testListActualUsage();
 	}
 
 	@Test
 	public void testCalcUsageRate() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testIsUnderMaintenance() {
-		fail("Not yet implemented");
+		useTest.testCalcUsageRate();
 	}
 
 }

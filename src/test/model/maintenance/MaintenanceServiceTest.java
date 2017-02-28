@@ -89,5 +89,20 @@ public class MaintenanceServiceTest {
 		maint.scheduleMaintenance(ticket, defaultOrderTime, defaultResolveTime);
 		assertEquals(maint.calcDownTimeForFacility(defaultSinceTime, defaultTilTime), .5 ,0);
 	}
+	
+	@Test
+	public void testListMaintRequests() {
+		fail("Not yet implemented");
+	}
+	
+	@Test
+	public void testListMaintenance() {
+		fail("Not yet implemented");
+	}
+	
+	@Test
+	public void testListFacilityProblems() {
+		fail("Not yet implemented");
+	}
 
 }

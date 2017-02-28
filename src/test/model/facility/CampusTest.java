@@ -9,7 +9,6 @@ import org.junit.Test;
 import main.model.facility.Building;
 import main.model.facility.Campus;
 import main.model.facility.Room;
-import main.model.facility.ScheduleManager;
 
 public class CampusTest {
 	
@@ -17,8 +16,6 @@ public class CampusTest {
 	Room defaultRoom2 = new Room("712", 50);
 	Building defaultBuilding = new Building("Corboy Law Center");
 	Campus defaultCampus = new Campus("Loyola University");
-	ScheduleManager defaultSchedule = new ScheduleManager();
-	String detail = "Closed on weekends";
 
 	@Before
 	public void setUp() throws Exception {
