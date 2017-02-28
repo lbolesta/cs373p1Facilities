@@ -96,8 +96,8 @@ public class ScheduleManager implements IFacilityMaintenance<MaintTicket>, IFaci
 		return usage.listActualUsage();
 	}
 	@Override
-	public float calcUsageRate(ZonedDateTime since) {
-		return usage.calcUsageRate(since);
+	public float calcUsageRate(ZonedDateTime since, ZonedDateTime til) {
+		return usage.calcUsageRate(since, til);
 	}
 	
 	public boolean isUnderMaintenance(ZonedDateTime startTime, ZonedDateTime endTime) {

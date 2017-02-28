@@ -14,7 +14,7 @@ import main.model.use.*;
 public class FacilityMain {
 	public static void main (String args[]){
 	
-		ArrayList<String> detail = new ArrayList<>();
+		/*ArrayList<String> detail = new ArrayList<>();
 		detail.add("Needs admin approval");
 		detail.add("Downtown Campus");
 		
@@ -80,7 +80,7 @@ public class FacilityMain {
 		"ID Number: " + user.getIdNumber());
 		res.setStartTime(start);
 		res.setEndTime(end);
-		System.out.println("Start Time: " + start + "\n" + "End Time: " + end);
+		System.out.println("Start Time: " + start + "\n" + "End Time: " + end);*/
 		
 		}
 	}

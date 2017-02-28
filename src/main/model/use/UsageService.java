@@ -17,15 +17,18 @@ public class UsageService implements IFacilityUse<Reservation, Inspection> {
 
 	@Override
 	public boolean isInUseDuringInterval(ZonedDateTime startTime, ZonedDateTime endTime) {
-		boolean inUse = false;
-		while (!inUse){
-			for (Reservation reservation : reservations) {
-				ZonedDateTime resStart = reservation.getStartTime();
-				ZonedDateTime resEnd = reservation.getEndTime();
-				inUse = (resStart.isBefore(startTime) && resEnd.isAfter(startTime)) || (resStart.isBefore(endTime) && resEnd.isAfter(endTime));
+		for (Reservation reservation : reservations) {
+			ZonedDateTime resStart = reservation.getStartTime();
+			ZonedDateTime resEnd = reservation.getEndTime();
+			if (startTime.isBefore(resStart) && (endTime.isBefore(resStart) || endTime.isEqual(resStart))) {
+				break;
+			} else if (endTime.isAfter(resEnd) && (startTime.isAfter(resEnd) || startTime.isEqual(resEnd))) {
+				break;
+			} else {
+				return true;
 			}
 		}
-		return inUse;
+		return false;
 	}
 
 	@Override
@@ -42,12 +45,16 @@ public class UsageService implements IFacilityUse<Reservation, Inspection> {
 	public void vacateFacility(ZonedDateTime startTime, ZonedDateTime endTime) {
 		boolean inUse = isInUseDuringInterval(startTime, endTime);
 		if(inUse) {
+			List<Reservation> removals = new ArrayList<Reservation>();
 			for (Reservation reservation : reservations){
 				ZonedDateTime resStart = reservation.getStartTime();
 				ZonedDateTime resEnd = reservation.getEndTime();
 				if (resEnd.isAfter(startTime) && resStart.isBefore(endTime)) {
-					this.removeReservation(reservation);
+					removals.add(reservation);
 				}
+			}
+			for (Reservation reservation : removals) {
+				this.removeReservation(reservation);
 			}
 		}
 	}
@@ -63,10 +70,9 @@ public class UsageService implements IFacilityUse<Reservation, Inspection> {
 	}
 
 	@Override
-	public float calcUsageRate(ZonedDateTime since) {
+	public float calcUsageRate(ZonedDateTime since, ZonedDateTime til) {
 		float usageTime = 0;
-		ZonedDateTime now = ZonedDateTime.now();
-		float total = (Duration.between(since, now)).toHours();
+		float total = (Duration.between(since, til)).toHours();
 		for (Reservation reservation : reservations){
 			if(reservation.getStartTime().isAfter(since)) {
 				Duration d = Duration.between(reservation.getStartTime(), reservation.getEndTime());
@@ -77,10 +83,6 @@ public class UsageService implements IFacilityUse<Reservation, Inspection> {
 			}
 		}
 		return usageTime/total;
-	}
-
-	public List<Reservation> getReservations() {
-		return reservations;
 	}
 
 	public void setReservations(List<Reservation> reservations) {
@@ -97,12 +99,12 @@ public class UsageService implements IFacilityUse<Reservation, Inspection> {
 		}
 	}
 
-	public List<Inspection> getInspections() {
-		return inspections;
-	}
-
-	public void setInspections(List<Inspection> inspections) {
-		this.inspections = inspections;
+	public void addInspections(List<Inspection> inspections) {
+		for (Inspection i : inspections) {
+			if (!this.inspections.contains(i)){
+				this.inspections.add(i);
+			}
+		}
 	}
 
 }

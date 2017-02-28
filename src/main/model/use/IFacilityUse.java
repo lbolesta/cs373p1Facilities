@@ -10,6 +10,6 @@ public interface IFacilityUse<T,S> {
 	public void vacateFacility(ZonedDateTime startTime, ZonedDateTime endTime);
 	public List<S> listInspections();
 	public List<T> listActualUsage();
-	public float calcUsageRate(ZonedDateTime since);
+	public float calcUsageRate(ZonedDateTime since, ZonedDateTime til);
 
 }

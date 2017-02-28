@@ -2,12 +2,29 @@ package test.model.use;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class UsageServiceTest {
+import main.model.use.Inspection;
+import main.model.use.UsageService;
+import main.model.use.User;
 
+public class UsageServiceTest {
+	
+	final ZonedDateTime defaultSinceTime = ZonedDateTime.of(2016, 3, 1, 6, 0, 0, 0, ZoneId.systemDefault());
+	final ZonedDateTime defaultStartTime = ZonedDateTime.of(2016, 3, 1, 7, 0, 0, 0, ZoneId.systemDefault());
+	final ZonedDateTime defaultEndTime = ZonedDateTime.of(2016, 3, 1, 9, 0, 0, 0, ZoneId.systemDefault());
+	final ZonedDateTime defaultTilTime = ZonedDateTime.of(2016, 3, 1, 11, 0, 0, 0, ZoneId.systemDefault());
+	final UsageService defaultUsageService = new UsageService();
+	final User defaultUser = new User("Annie");
+	final Inspection defaultInspection = new Inspection("Water Inspection", ZonedDateTime.of(2015, 3, 1, 7, 0, 0, 0, ZoneId.systemDefault()));
+	
 	@Before
 	public void setUp() throws Exception {
 	}
@@ -18,52 +35,66 @@ public class UsageServiceTest {
 
 	@Test
 	public void testIsInUseDuringInterval() {
-		fail("Not yet implemented");
+		UsageService use = defaultUsageService;
+		assertFalse(use.isInUseDuringInterval(defaultStartTime, defaultEndTime)); //7-9
+		use.assignFacilityToUse(defaultStartTime, defaultEndTime, defaultUser);
+		assertTrue(use.isInUseDuringInterval(defaultStartTime, defaultEndTime)); //7-9
+		assertFalse(use.isInUseDuringInterval(defaultStartTime.minusHours(1), defaultStartTime)); //6-7
+		assertFalse(use.isInUseDuringInterval(defaultEndTime, defaultEndTime.plusHours(1))); //9-10
+		assertTrue(use.isInUseDuringInterval(defaultStartTime.minusHours(1), defaultEndTime.minusHours(1))); //6-8
+		assertTrue(use.isInUseDuringInterval(defaultStartTime.plusHours(1), defaultEndTime.plusHours(1))); //8-10
+		assertTrue(use.isInUseDuringInterval(defaultStartTime.plusMinutes(30), defaultEndTime.minusMinutes(30))); //7:30-8:30
 	}
 
 	@Test
 	public void testAssignFacilityToUse() {
-		fail("Not yet implemented");
+		UsageService use = defaultUsageService;
+		assertTrue(use.assignFacilityToUse(defaultStartTime, defaultEndTime, defaultUser)); //7-9
+		assertFalse(use.assignFacilityToUse(defaultStartTime, defaultEndTime, defaultUser)); //7-9
+		assertFalse(use.assignFacilityToUse(defaultStartTime.plusHours(1), defaultEndTime.plusHours(1), defaultUser)); //8-10
+		assertFalse(use.isInUseDuringInterval(defaultEndTime, defaultEndTime.plusHours(2))); //9-11
+		assertTrue(use.assignFacilityToUse(defaultStartTime.plusHours(2), defaultEndTime.plusHours(2), defaultUser)); //9-11
 	}
 
 	@Test
 	public void testVacateFacility() {
-		fail("Not yet implemented");
+		UsageService use = defaultUsageService;
+		use.assignFacilityToUse(defaultStartTime, defaultEndTime, defaultUser);
+		assertTrue(use.isInUseDuringInterval(defaultStartTime, defaultEndTime));
+		use.vacateFacility(defaultStartTime.minusHours(1), defaultEndTime.minusHours(1));
+		assertFalse(use.isInUseDuringInterval(defaultStartTime, defaultEndTime));
 	}
 
 	@Test
-	public void testListInspections() {
-		fail("Not yet implemented");
+	public void testListAndAddInspections() {
+		UsageService use = defaultUsageService;
+		Inspection i = defaultInspection;
+		Inspection j = new Inspection(i.getDescription(), i.getDate().minusYears(1));
+		Inspection k = new Inspection(j.getDescription(), j.getDate().minusYears(1));
+		List<Inspection> ins = new ArrayList<Inspection>();
+		ins.add(i);
+		use.addInspections(ins);
+		assertEquals(use.listInspections(), ins);
+		ins.add(j);
+		ins.add(k);
+		use.addInspections(ins);
+		assertEquals(use.listInspections(), ins);
 	}
 
 	@Test
 	public void testListActualUsage() {
-		fail("Not yet implemented");
+		UsageService use = defaultUsageService;
+		assertTrue(use.listActualUsage().isEmpty());
+		use.assignFacilityToUse(defaultStartTime, defaultEndTime, defaultUser);
+		assertFalse(use.listActualUsage().isEmpty());
 	}
 
 	@Test
 	public void testCalcUsageRate() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testGetReservations() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testSetReservations() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testGetInspections() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testSetInspections() {
-		fail("Not yet implemented");
+		UsageService use = defaultUsageService;
+		assertEquals(use.calcUsageRate(defaultSinceTime, defaultTilTime), 0, 0);
+		use.assignFacilityToUse(defaultStartTime, defaultEndTime, defaultUser);
+		assertEquals(use.calcUsageRate(defaultSinceTime, defaultTilTime), .4, 0.01);
 	}
 
 }
