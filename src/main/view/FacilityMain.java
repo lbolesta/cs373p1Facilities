@@ -62,10 +62,10 @@ public class FacilityMain {
 		//checking if facility is in use
 		boolean k = schedule.isInUseDuringInterval(AssignUseStart, AssignUseEnd);
 		if(k == true){
-			System.out.println("Facility is in use, assigned to " + Joe.getName());
+			System.out.println("Facility is in use, assigned to " + Joe.getName() + "\n");
 		}
 		else{
-			System.out.println("Facility is not in use");//this if else should
+			System.out.println("Facility is not in use \n");//this if else should
 			//print the first statement, Facility is in use because it was assigned
 		}
 		
@@ -73,6 +73,22 @@ public class FacilityMain {
 		//System.out.println("Down time is: " + DT);
 		//this is throwing a null pointer exception, not sure if issue is method call or with method
 		
+		//adding a worker
+		System.out.println("Adding worker: ");
+		Worker bob = new Worker("Bob", 15.25);
+		
+		System.out.println("Worker " + bob.getName() + " added at " +
+		bob.getWage() + " " + "per hour \n" );
+		
+		//adding material
+		System.out.println("Adding maintenance material:");
+		Material screws = new Material("Screws", .05);
+		System.out.println("Material " + screws.getName() + " " +
+				"added at " + screws.getCost() + " " + "per unit \n");
+		
+		//float UR = schedule.calcUsageRate(start, end);
+		//System.out.println("Usage Rate = " + UR);
+		//this is also giving a null pointer exception - unknown source on ZonedDateTime
 		
 		}
 	}
