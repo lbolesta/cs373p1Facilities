@@ -1,5 +1,6 @@
 package main.model.facility;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Campus extends Facility {
@@ -7,6 +8,12 @@ public class Campus extends Facility {
 	private List<IFacility<UnitInfo>> subunits;
 	private UnitInfo info;
 	private ScheduleManager schedule;
+	
+	public Campus(String name){
+		subunits = new ArrayList<IFacility<UnitInfo>>();
+		this.info = new UnitInfo(name, 0);
+		schedule = new ScheduleManager();
+	}
 
 	@Override
 	public UnitInfo getInfo() {

@@ -1,12 +1,18 @@
 package main.model.facility;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UnitInfo {
 	private int capacity;
 	private String name;
-	private int idNumber;
 	private List<String> details;
+	
+	public UnitInfo(String name, int capacity){
+		setName(name);
+		setCapacity(capacity);
+		details = new ArrayList<String>();
+	}
 	
 	public int getCapacity() {
 		return capacity;
@@ -20,32 +26,25 @@ public class UnitInfo {
 		return name;
 	}
 
+	//TODO check against duplicate names
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public int getIdNumber() {
-		return idNumber;
-	}
-
-	public void setIdNumber(int idNumber) {
-		this.idNumber = idNumber;
 	}
 
 	public List<String> getDetails() {
 		return details;
 	}
-
-	public void setDetails(List<String> details) {
-		this.details = details;
-	}
 	
 	public void addDetail(String detail) {
-		details.add(detail);
+		if (!details.contains(detail)){
+			details.add(detail);
+		}
 	}
 	
 	public void removeDetail(String detail) {
-		details.remove(detail);
+		if (details.contains(detail)){
+			details.remove(detail);
+		}
 	}
 	
 }

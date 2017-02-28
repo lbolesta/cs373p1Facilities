@@ -9,8 +9,10 @@ import org.junit.Test;
 import main.model.facility.UnitInfo;
 
 public class UnitInfoTest {
-
-	UnitInfo defaultUnitInfo = new UnitInfo();
+	
+	UnitInfo defaultUnitInfo = new UnitInfo("711", 40);
+	String detail1 = "Class use only";
+	String detail2 = "Keycard locked";
 	@Before
 	public void setUp() throws Exception {
 	}
@@ -21,52 +23,34 @@ public class UnitInfoTest {
 	
 	@Test
 	public void testGetCapacityAndSetCapacity() {
-		UnitInfo a = defaultUnitInfo;
-		assertEquals(a.getCapacity(), null);
-		a.setCapacity(10);
-		assertEquals(a.getCapacity(), 10);
-		a.setCapacity(20);
-		assertEquals(a.getCapacity(), 20);
+		UnitInfo i = defaultUnitInfo;
+		assertEquals(i.getCapacity(), 40);
+		i.setCapacity(10);
+		assertEquals(i.getCapacity(), 10);
 	}
 
 	@Test
 	public void testGetNameAndSetName() {
-		UnitInfo b = defaultUnitInfo;
-		assertEquals(b.getName(), null);
-		b.setName("Lewis Towers");
-		assertEquals(b.getName(), "Lewis Towers");
-		b.setName("IC");
-		assertEquals(b.getName(), "IC");
-	}
-	
-	@Test
-	public void testGetIdNumberAndSetIdNumber() {
-		UnitInfo c = defaultUnitInfo;
-		assertEquals(c.getIdNumber(), null);
-		c.setIdNumber(1);
-		assertEquals(c.getIdNumber(), 1);
-		c.setIdNumber(2);
-		assertEquals(c.getIdNumber(), 2);
+		UnitInfo i = defaultUnitInfo;
+		assertEquals(i.getName(), "711");
+		i.setName("712");
+		assertEquals(i.getName(), "712");
 	}
 
 	@Test
-	public void testGetDetails() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testSetDetails() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testAddDetail() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testRemoveDetail() {
-		fail("Not yet implemented");
+	public void testDetails() {
+		UnitInfo i = defaultUnitInfo;
+		assertTrue(i.getDetails().isEmpty());
+		i.addDetail(detail1);
+		assertTrue(i.getDetails().contains(detail1));
+		i.addDetail(detail1);
+		assertEquals(i.getDetails().size(),1);
+		i.addDetail(detail2);
+		assertEquals(i.getDetails().size(), 2);
+		i.removeDetail(detail1);
+		assertEquals(i.getDetails().size(), 1);
+		i.removeDetail(detail1);
+		assertEquals(i.getDetails().size(), 1);
 	}
 
 }

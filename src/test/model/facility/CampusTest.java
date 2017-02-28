@@ -6,7 +6,19 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import main.model.facility.Building;
+import main.model.facility.Campus;
+import main.model.facility.Room;
+import main.model.facility.ScheduleManager;
+
 public class CampusTest {
+	
+	Room defaultRoom = new Room("711", 40);
+	Room defaultRoom2 = new Room("712", 50);
+	Building defaultBuilding = new Building("Corboy Law Center");
+	Campus defaultCampus = new Campus("Loyola University");
+	ScheduleManager defaultSchedule = new ScheduleManager();
+	String detail = "Closed on weekends";
 
 	@Before
 	public void setUp() throws Exception {
@@ -18,42 +30,49 @@ public class CampusTest {
 
 	@Test
 	public void testGetInfo() {
-		fail("Not yet implemented");
+		assertNotNull(defaultCampus.getInfo());
+		assertEquals(defaultCampus.getInfo().getName(), "Loyola University");
 	}
 
 	@Test
 	public void testGetScheduleManager() {
-		fail("Not yet implemented");
+		assertNotNull(defaultCampus.getScheduleManager());
 	}
 
 	@Test
-	public void testListFacilities() {
-		fail("Not yet implemented");
+	public void testFacilities() {
+		assertTrue(defaultCampus.listFacilities().isEmpty());
+		defaultBuilding.addNewFacility(defaultRoom);
+		defaultBuilding.addNewFacility(defaultRoom2);
+		defaultCampus.addNewFacility(defaultBuilding);
+		assertTrue(defaultCampus.listFacilities().contains(defaultBuilding));
+		assertEquals(defaultCampus.listFacilities().size(),1);
+		defaultCampus.addNewFacility(defaultBuilding);
+		assertEquals(defaultCampus.listFacilities().size(),1);
+		defaultCampus.removeFacility(defaultBuilding);
+		assertEquals(defaultCampus.listFacilities().size(),0);
 	}
 
 	@Test
 	public void testRequestAvailableCapacity() {
-		fail("Not yet implemented");
+		assertEquals(defaultCampus.requestAvailableCapacity(), 0);
+		defaultBuilding.addNewFacility(defaultRoom);
+		defaultBuilding.addNewFacility(defaultRoom2);
+		defaultCampus.addNewFacility(defaultBuilding);
+		assertEquals(defaultCampus.requestAvailableCapacity(), 90);
 	}
 
 	@Test
 	public void testGetFacilityInformation() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testAddNewFacility() {
-		fail("Not yet implemented");
+		assertNotNull(defaultBuilding.getFacilityInformation());
 	}
 
 	@Test
 	public void testAddNewFacilityDetail() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testRemoveFacility() {
-		fail("Not yet implemented");
+		assertTrue(defaultCampus.getFacilityInformation().getDetails().isEmpty());
+		defaultCampus.addNewFacilityDetail("Jesuit university");
+		assertFalse(defaultCampus.getFacilityInformation().getDetails().isEmpty());
+		assertEquals(defaultCampus.getFacilityInformation().getDetails().size(), 1);
 	}
 
 }

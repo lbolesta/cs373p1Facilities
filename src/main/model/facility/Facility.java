@@ -1,5 +1,6 @@
 package main.model.facility;
 
+import java.util.ArrayList;
 import java.util.List;
 
 abstract public class Facility implements IFacility<UnitInfo> {
@@ -15,11 +16,18 @@ abstract public class Facility implements IFacility<UnitInfo> {
 	}
 	
 	public void addNewFacility(IFacility<UnitInfo> facility) {
-		listFacilities().add(facility);
+		if (!listFacilities().contains(facility)){
+			listFacilities().add(facility);
+			getInfo().setCapacity(requestAvailableCapacity());
+		}
 	}
 	
 	public void addNewFacilityDetail(String detail) {
 		getInfo().addDetail(detail);
+	}
+	
+	public void removeFacilityDetail(String detail){
+		getInfo().removeDetail(detail);
 	}
 	
 	public void removeFacility(IFacility<UnitInfo> facility) {

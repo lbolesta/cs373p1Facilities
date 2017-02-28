@@ -1,7 +1,6 @@
 package test.model.facility;
 
 import static org.junit.Assert.*;
-import main.model.facility.Building;
 
 import org.junit.After;
 import org.junit.Before;
@@ -10,8 +9,12 @@ import main.model.facility.*;
 
 
 public class BuildingTest {
-	Building defaultBuilding = new Building();
+
+	Room defaultRoom = new Room("711", 40);
+	Room defaultRoom2 = new Room("712", 50);
+	Building defaultBuilding = new Building("Corboy Law Center");
 	ScheduleManager defaultSchedule = new ScheduleManager();
+	String detail = "Closed on weekends";
 
 	@Before
 	public void setUp() throws Exception {
@@ -23,45 +26,53 @@ public class BuildingTest {
 
 	@Test
 	public void testGetInfo() {
-		 Building b = defaultBuilding;
-		 assertEquals(b.getInfo(), null);
-		
+		assertNotNull(defaultBuilding.getInfo());
+		assertEquals(defaultBuilding.getInfo().getName(), "Corboy Law Center");
 	}
 
 	@Test
 	public void testGetScheduleManager() {
-		Building a = defaultBuilding; 
-		assertEquals(a.getScheduleManager(), null);
+		assertNotNull(defaultBuilding.getScheduleManager());
 	}
 
 	@Test
-	public void testListFacilities() {
-		fail("Not yet implemented");
+	public void testFacilities() {
+		assertTrue(defaultBuilding.listFacilities().isEmpty());
+		defaultBuilding.addNewFacility(defaultRoom);
+		assertTrue(defaultBuilding.listFacilities().contains(defaultRoom));
+		assertEquals(defaultBuilding.listFacilities().size(),1);
+		defaultBuilding.addNewFacility(defaultRoom);
+		assertEquals(defaultBuilding.listFacilities().size(),1);
+		defaultBuilding.addNewFacility(defaultRoom2);
+		assertEquals(defaultBuilding.listFacilities().size(),2);
+		defaultBuilding.removeFacility(defaultRoom);
+		assertEquals(defaultBuilding.listFacilities().size(),1);
+		defaultBuilding.removeFacility(defaultRoom);
+		assertEquals(defaultBuilding.listFacilities().size(),1);
 	}
 
 	@Test
 	public void testRequestAvailableCapacity() {
-		fail("Not yet implemented");
+		assertEquals(defaultBuilding.requestAvailableCapacity(), 0);
+		defaultBuilding.addNewFacility(defaultRoom);
+		assertEquals(defaultBuilding.requestAvailableCapacity(), 40);
 	}
 
 	@Test
 	public void testGetFacilityInformation() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testAddNewFacility() {
-		fail("Not yet implemented");
+		assertNotNull(defaultBuilding.getFacilityInformation());
+		assertEquals(defaultBuilding.getFacilityInformation().getName(), "Corboy Law Center");
+		assertEquals(defaultBuilding.getFacilityInformation().getCapacity(), 0);
+		defaultBuilding.addNewFacility(defaultRoom);
+		assertEquals(defaultBuilding.getFacilityInformation().getCapacity(), 40);
 	}
 
 	@Test
 	public void testAddNewFacilityDetail() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testRemoveFacility() {
-		fail("Not yet implemented");
+		assertTrue(defaultBuilding.getFacilityInformation().getDetails().isEmpty());
+		defaultBuilding.addNewFacilityDetail(detail);
+		assertFalse(defaultBuilding.getFacilityInformation().getDetails().isEmpty());
+		assertEquals(defaultBuilding.getFacilityInformation().getDetails().size(), 1);
 	}
 
 }

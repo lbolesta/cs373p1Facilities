@@ -2,8 +2,6 @@ package test.model.use;
 
 import static org.junit.Assert.*;
 
-import java.time.ZoneId;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

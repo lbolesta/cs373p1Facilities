@@ -1,5 +1,6 @@
 package main.model.facility;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Room extends Facility {
@@ -8,17 +9,23 @@ public class Room extends Facility {
 	private UnitInfo info;
 	private ScheduleManager schedule;
 	
+	public Room(String name, int capacity){
+		subunits = new ArrayList<IFacility<UnitInfo>>();
+		this.info = new UnitInfo(name, capacity);
+		schedule = new ScheduleManager();
+	}
+	
 	@Override
 	public List<IFacility<UnitInfo>> listFacilities() {
-		subunits.add(this);
-		return subunits;
+		if(!subunits.contains(this)){
+			subunits.add(this);
+		}
+		return subunits;  //just returns self
 	}
 
 	@Override
 	public int requestAvailableCapacity() {
-		//TODO
-		int totalCapacity = info.getCapacity();
-		return totalCapacity;
+		return info.getCapacity();
 	}
 
 	@Override

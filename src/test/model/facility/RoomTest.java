@@ -6,7 +6,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import main.model.facility.Room;
+import main.model.facility.ScheduleManager;
+
 public class RoomTest {
+	
+	String detail1 = "Class use only";
+	String detail2 = "Keycard locked";
+	Room defaultRoom = new Room("711", 40);
+	ScheduleManager defaultSchedule = new ScheduleManager();
 
 	@Before
 	public void setUp() throws Exception {
@@ -18,42 +26,41 @@ public class RoomTest {
 
 	@Test
 	public void testGetInfo() {
-		fail("Not yet implemented");
+		assertNotNull(defaultRoom.getInfo());
+		assertEquals(defaultRoom.getInfo().getName(), "711");
+		assertEquals(defaultRoom.getInfo().getCapacity(), 40);
 	}
 
 	@Test
 	public void testGetScheduleManager() {
-		fail("Not yet implemented");
+		assertNotNull(defaultRoom.getScheduleManager());
 	}
 
 	@Test
 	public void testListFacilities() {
-		fail("Not yet implemented");
+		assertFalse(defaultRoom.listFacilities().isEmpty());
+		assertTrue(defaultRoom.listFacilities().contains(defaultRoom));
+		assertEquals(defaultRoom.listFacilities().size(),1);
 	}
 
 	@Test
 	public void testRequestAvailableCapacity() {
-		fail("Not yet implemented");
+		assertEquals(defaultRoom.requestAvailableCapacity(), 40);
 	}
 
 	@Test
 	public void testGetFacilityInformation() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testAddNewFacility() {
-		fail("Not yet implemented");
+		assertNotNull(defaultRoom.getFacilityInformation());
+		assertEquals(defaultRoom.getFacilityInformation().getName(), "711");
+		assertEquals(defaultRoom.getFacilityInformation().getCapacity(), 40);
 	}
 
 	@Test
 	public void testAddNewFacilityDetail() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testRemoveFacility() {
-		fail("Not yet implemented");
+		assertTrue(defaultRoom.getFacilityInformation().getDetails().isEmpty());
+		defaultRoom.addNewFacilityDetail(detail1);
+		assertFalse(defaultRoom.getFacilityInformation().getDetails().isEmpty());
+		assertEquals(defaultRoom.getFacilityInformation().getDetails().size(), 1);
 	}
 
 }
