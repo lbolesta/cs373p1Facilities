@@ -14,6 +14,16 @@ public class UnitInfo {
 		details = new ArrayList<String>();
 	}
 	
+	public String toString() {
+		String str = "";
+		str += "Name: " + name;
+		str += "\nCapacity: " + capacity;
+		for (String detail : details){
+			str += "\nDetail: " + detail;
+		}
+		return str;
+	}
+	
 	public int getCapacity() {
 		return capacity;
 	}

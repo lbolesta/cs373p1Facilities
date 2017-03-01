@@ -112,5 +112,9 @@ public class ScheduleManager implements IFacilityMaintenance<MaintTicket>, IFaci
 		return false;
 	}
 	
+	public void addInspections(List<Inspection> inspections) {
+		usage.addInspections(inspections);
+	}
+	
 	
 }

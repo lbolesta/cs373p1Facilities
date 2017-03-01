@@ -1,21 +1,20 @@
 package main.model.facility;
 
-import java.util.ArrayList;
 import java.util.List;
 
-abstract public class Facility implements IFacility<UnitInfo> {
+abstract public class Facility implements IFacility<Facility> {
 	
 	public abstract UnitInfo getInfo();
 	public abstract ScheduleManager getScheduleManager();
 
-	abstract public List<IFacility<UnitInfo>> listFacilities();
+	abstract public List<Facility> listFacilities();
 	abstract public int requestAvailableCapacity();
 	
 	public UnitInfo getFacilityInformation() {
 		return getInfo();
 	}
 	
-	public void addNewFacility(IFacility<UnitInfo> facility) {
+	public void addNewFacility(Facility facility) {
 		if (!listFacilities().contains(facility)){
 			listFacilities().add(facility);
 			getInfo().setCapacity(requestAvailableCapacity());

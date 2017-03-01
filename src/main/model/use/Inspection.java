@@ -11,6 +11,13 @@ public class Inspection {
 		this.date = date;
 	}
 	
+	public String toString(){
+		String str = "";
+		str += "Date: " + date.toString();
+		str += "\n" + description;
+		return str;
+	}
+	
 	public ZonedDateTime getDate() {
 		return date;
 	}

@@ -1,10 +1,9 @@
 
 package main.view;
-import java.awt.List;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.*;
+import java.util.List;
 
 import main.model.facility.*;
 import main.model.maintenance.*;
@@ -13,83 +12,161 @@ import main.model.use.*;
 
 public class FacilityMain {
 	public static void main (String args[]){
-		ZonedDateTime start = ZonedDateTime.of(2017, 3, 5, 8, 0, 0, 0, ZoneId.systemDefault());
-		ZonedDateTime end = ZonedDateTime.of(2017, 3, 5, 10, 0, 0, 0, ZoneId.systemDefault());
-		ZonedDateTime AssignUseStart = ZonedDateTime.of(2017, 3, 10, 10, 0, 0, 0, ZoneId.systemDefault());
-		ZonedDateTime AssignUseEnd = ZonedDateTime.of(2017, 3, 5, 15, 0, 0, 0, ZoneId.systemDefault());
-		ZonedDateTime defaultStart = ZonedDateTime.of(2017, 10, 5, 10, 0, 0, 0, ZoneId.systemDefault());
-		ZonedDateTime defaultEnd = ZonedDateTime.of(2017, 10, 5, 15, 0, 0, 0, ZoneId.systemDefault());
-		User Joe = new User("Joe");
-		MaintTicket m = new MaintTicket("Sink will be fixed", ZonedDateTime.of(2017, 3, 5, 8, 0, 0, 0, ZoneId.systemDefault()));
 		
-		ScheduleManager schedule = new ScheduleManager();
+		//FACILITY
+		System.out.println("Demonstrating facility methods...");
 		
-		//make maintenance request
-		schedule.makeFacilityMaintRequest("Fix Sink", ZonedDateTime.of(2017, 3, 1, 8, 0, 0, 0, ZoneId.systemDefault()));
-		System.out.println("Maintenance Request has been made \n");
+		Room defaultRoom = new Room("711", 40);
+		Room defaultRoom2 = new Room("712", 50);
+		Building defaultBuilding = new Building("Corboy Law Center");
+		Campus defaultCampus = new Campus("Loyola University");
 		
-		//print maintenance requests
-		System.out.println("Listing maintenence requests:");
-		java.util.List<MaintTicket> print = schedule.listMaintRequests();
-		for (int i = 0; i < print.size(); i++){
-			System.out.println(print.get(i) + "\n");//issue here- printing memory location even though using get metho
+		//addNewFacility()
+		System.out.println();
+		System.out.println("Adding facilities...");
+		defaultCampus.addNewFacility(defaultBuilding);
+		defaultCampus.getFacility("Corboy Law Center").addNewFacility(defaultRoom);
+		defaultCampus.getFacility("Corboy Law Center").addNewFacility(defaultRoom2);
+		
+		//listFacilities() and requestAvailableCapacity()
+		System.out.println();
+		System.out.println("Listing facilities...");
+		for (Building b : defaultCampus.listFacilities()){
+			System.out.println("Building name: " + b.getFacilityInformation().getName());
+			System.out.println("Building capacity: " + b.requestAvailableCapacity());
+		}
+		for (Room r : defaultCampus.getFacility("Corboy Law Center").listFacilities()){
+			System.out.println("Room name: " + r.getFacilityInformation().getName());
+			System.out.println("Room capacity: " + r.requestAvailableCapacity());
 		}
 		
-		//schedule maintenance
-		schedule.scheduleMaintenance(m, start, end);
-		System.out.println("Maintenance has been scheduled \n");
-		
-		//print scheduled maintenance
-		System.out.println("Listing scheduled maintenance:");
-		java.util.List<MaintTicket> print2 = schedule.listMaintenance();
-		for (int i = 0; i < print2.size(); i++){
-			System.out.println(print2.get(i) + "\n");
-		}//this is also not printing
-		
-		//checking if is use
-		boolean l = schedule.isInUseDuringInterval(defaultStart, defaultEnd);
-		if(l == true){
-			System.out.println("Facility is in use");// prints correctly, maintenance scheduling working
+		//removeFacility()
+		System.out.println();
+		System.out.println("Removing facility...");
+		defaultCampus.getFacility("Corboy Law Center").removeFacility(defaultRoom2);
+		for (Building b : defaultCampus.listFacilities()){
+			System.out.println("Building name: " + b.getFacilityInformation().getName());
+			System.out.println("Building capacity: " + b.requestAvailableCapacity());
 		}
-		else{
-			System.out.println("Facility is not in use");
+		for (Room r : defaultCampus.getFacility("Corboy Law Center").listFacilities()){
+			System.out.println("Room name: " + r.getFacilityInformation().getName());
+			System.out.println("Room capacity: " + r.requestAvailableCapacity());
 		}
 		
-		//assigning a facility to use
-		schedule.assignFacilityToUse(AssignUseStart, AssignUseEnd, Joe);
-		System.out.println("Facility has been assigned to " + Joe.getName() + "\n");
+		//addFacilityDetail()
+		System.out.println();
+		System.out.println("Adding facility detail...");
+		defaultCampus.addNewFacilityDetail("Jesuit university");
 		
-		//checking if facility is in use
-		boolean k = schedule.isInUseDuringInterval(AssignUseStart, AssignUseEnd);
-		if(k == true){
-			System.out.println("Facility is in use, assigned to " + Joe.getName() + "\n");
+		//getFacilityInformation()
+		System.out.println(defaultCampus.getFacilityInformation().toString());
+		
+		
+		//USAGE
+		System.out.println();
+		System.out.println("Demonstrating usage methods...");
+		
+		final ZonedDateTime defaultStartTime = ZonedDateTime.of(2016, 3, 1, 7, 0, 0, 0, ZoneId.systemDefault());
+		final ZonedDateTime defaultEndTime = ZonedDateTime.of(2016, 3, 1, 10, 0, 0, 0, ZoneId.systemDefault());
+		final User defaultUser = new User("Anna");
+		
+		Room room = defaultCampus.getFacility("Corboy Law Center").getFacility("711");
+		ScheduleManager schedule = room.getScheduleManager();
+		
+		//assignFacilityToUse()
+		System.out.println();
+		System.out.println("Creating reservation...");
+		schedule.assignFacilityToUse(defaultStartTime, defaultEndTime, defaultUser);
+		
+		//listActualUsage()
+		for (Reservation r : schedule.listActualUsage()){
+			System.out.println(r.toString());
 		}
-		else{
-			System.out.println("Facility is not in use \n");//this if else should
-			//print the first statement, Facility is in use because it was assigned
+		
+		//isInUseDuringInterval()
+		System.out.println();
+		System.out.println("Is in use between 8 & 10?");
+		System.out.println(schedule.isInUseDuringInterval(defaultStartTime.plusHours(1), defaultEndTime));
+		System.out.println("Is in use between 10 & 11?");
+		System.out.println(schedule.isInUseDuringInterval(defaultEndTime, defaultEndTime.plusHours(1)));
+		
+		//calcUsageRate()
+		System.out.println();
+		System.out.println("Usage rate between 6 & 12?");
+		final ZonedDateTime defaultSinceTime = ZonedDateTime.of(2016, 3, 1, 6, 0, 0, 0, ZoneId.systemDefault());
+		final ZonedDateTime defaultTilTime = ZonedDateTime.of(2016, 3, 1, 12, 0, 0, 0, ZoneId.systemDefault());
+		System.out.println(schedule.calcUsageRate(defaultSinceTime, defaultTilTime));
+		
+		//vacateFacility()
+		System.out.println();
+		System.out.println("Vacating room of any reservations in use from 8-10...");
+		schedule.vacateFacility(defaultStartTime.plusHours(1), defaultEndTime);
+		System.out.println("Is in use between 8 & 10?");
+		System.out.println(schedule.isInUseDuringInterval(defaultStartTime.plusHours(1), defaultEndTime));
+		
+		//addInspection() and listInspections()
+		System.out.println();
+		System.out.println("Adding inspection...");
+		
+		final Inspection defaultInspection = new Inspection("Water Inspection", ZonedDateTime.of(2015, 3, 1, 7, 0, 0, 0, ZoneId.systemDefault()));
+		final List<Inspection> inspections = new ArrayList<Inspection>();
+		inspections.add(defaultInspection);
+		
+		schedule.addInspections(inspections);
+		
+		for (Inspection i : schedule.listInspections()){
+			System.out.println(i.toString());
 		}
 		
-		//float DT = schedule.calcDownTimeForFacility(start, end);
-		//System.out.println("Down time is: " + DT);
-		//this is throwing a null pointer exception, not sure if issue is method call or with method
 		
-		//adding a worker
-		System.out.println("Adding worker: ");
-		Worker bob = new Worker("Bob", 15.25);
+		//MAINTENANCE
+		System.out.println();
+		System.out.println("Demonstrating maintenance methods...");
 		
-		System.out.println("Worker " + bob.getName() + " added at " +
-		bob.getWage() + " " + "per hour \n" );
+		//makeFacilityMaintRequest()
+		System.out.println();
+		System.out.println("Making maintenance request...");
+		schedule.makeFacilityMaintRequest("Replace lightbulb", defaultStartTime);
 		
-		//adding material
-		System.out.println("Adding maintenance material:");
-		Material screws = new Material("Screws", .05);
-		System.out.println("Material " + screws.getName() + " " +
-				"added at " + screws.getCost() + " " + "per unit \n");
+		//listMaintRequests()
+		for (MaintTicket t : schedule.listMaintRequests()){
+			System.out.println(t.toString());;
+		}
 		
-		//float UR = schedule.calcUsageRate(start, end);
-		//System.out.println("Usage Rate = " + UR);
-		//this is also giving a null pointer exception - unknown source on ZonedDateTime
+		//scheduleMaintenance()
+		System.out.println();
+		System.out.println("Scheduling maintenance order...");
+		MaintTicket defaultTicket = schedule.getMaint().getMaintTicket("Replace lightbulb");
 		
+		Material bulb = new Material("lightbulb", 2.50);
+		Worker Bob = new Worker("Bob", 15);
+		
+		defaultTicket.addMaterial(bulb);
+		defaultTicket.addWorker(Bob);
+		
+		schedule.scheduleMaintenance(defaultTicket, defaultStartTime.plusHours(2), defaultEndTime);
+		
+		//listMaintenance()
+		for (MaintTicket t : schedule.listMaintenance()){
+			System.out.println(t.toString());;
+		}
+		
+		//calcMaintenanceCostForFacility()
+		System.out.println();
+		System.out.println("Calculating cost of maintenance...");
+		System.out.println("Maintenance cost: " + String.format("%.2f", schedule.calcMaintenanceCostForFacility()));
+		
+		//calcDownTimeForFacility()
+		System.out.println();
+		System.out.println("Calculating downtime between 6 and 12...");
+		System.out.println("Downtime: " + schedule.calcDownTimeForFacility(defaultSinceTime, defaultTilTime));
+		
+		//listProblems()
+		System.out.println();
+		System.out.println("Listing historical problems for facility...");
+		for (String p : schedule.listFacilityProblems()){
+			System.out.println(p);
 		}
 	}
 
+}

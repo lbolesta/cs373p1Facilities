@@ -20,6 +20,14 @@ public class Reservation {
 		return ( b==null || a.isBefore(b) );
 	}
 	
+	public String toString(){
+		String str = "";
+		str += "Start time: " + startTime.toString();
+		str += "\nEnd time: " + endTime.toString();
+		str += "\nUser: " + user.getName();
+		return str;
+	}
+	
 	public ZonedDateTime getStartTime() {
 		return startTime;
 	}

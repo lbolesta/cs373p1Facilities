@@ -25,12 +25,6 @@ public class BuildingTest {
 	}
 
 	@Test
-	public void testGetInfo() {
-		assertNotNull(defaultBuilding.getInfo());
-		assertEquals(defaultBuilding.getInfo().getName(), "Corboy Law Center");
-	}
-
-	@Test
 	public void testGetScheduleManager() {
 		assertNotNull(defaultBuilding.getScheduleManager());
 	}

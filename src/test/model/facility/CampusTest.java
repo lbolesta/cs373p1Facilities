@@ -26,12 +26,6 @@ public class CampusTest {
 	}
 
 	@Test
-	public void testGetInfo() {
-		assertNotNull(defaultCampus.getInfo());
-		assertEquals(defaultCampus.getInfo().getName(), "Loyola University");
-	}
-
-	@Test
 	public void testGetScheduleManager() {
 		assertNotNull(defaultCampus.getScheduleManager());
 	}

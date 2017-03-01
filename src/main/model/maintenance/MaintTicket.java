@@ -20,6 +20,19 @@ public class MaintTicket {
 		workers = new ArrayList<Worker>();
 	}
 	
+	public String toString(){
+		String str = "";
+		str += "Description: " + description;
+		str += "\nRequest time: " + requestTime.toString();
+		if(orderTime != null){
+			str += "\nOrder time: " + orderTime.toString();
+		}
+		if(resolveTime != null){
+			str += "\nResolve time: " + resolveTime.toString();
+		}
+		return str;
+	}
+	
 	private boolean checkTime(ZonedDateTime req, ZonedDateTime ord, ZonedDateTime res){
 		return (isBefore(req, ord) && isBefore(ord, res));
 	}
