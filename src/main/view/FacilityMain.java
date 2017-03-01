@@ -77,14 +77,21 @@ public class FacilityMain {
 		System.out.println("Adding worker: ");
 		Worker bob = new Worker("Bob", 15.25);
 		
-		System.out.println("Worker " + bob.getName() + " added at " +
+		System.out.println("Worker " + bob.getName() + " added at $" +
 		bob.getWage() + " " + "per hour \n" );
 		
 		//adding material
 		System.out.println("Adding maintenance material:");
 		Material screws = new Material("Screws", .05);
 		System.out.println("Material " + screws.getName() + " " +
-				"added at " + screws.getCost() + " " + "per unit \n");
+				"added at $" + screws.getCost() + " " + "per unit \n");
+		
+		//ensuring unique id numbers are created
+		System.out.println("Joe's ID number: " + Joe.getIdNumber());
+		User Lauren = new User("Lauren"); 
+		System.out.println("Lauren's ID number: " + Lauren.getIdNumber());
+		//creates a new ID number each time the program is run. okay for now,
+		//think about fixing 
 		
 		//float UR = schedule.calcUsageRate(start, end);
 		//System.out.println("Usage Rate = " + UR);

@@ -1,5 +1,7 @@
 package main.model.use;
 
+import java.util.Random;
+
 public class User {
 	private String name;
 	private int idNumber;
@@ -24,5 +26,7 @@ public class User {
 	// TODO: generate unique ID number for each new user
 	private void setIdNumber() {
 		idNumber = -1;
+		Random rand = new Random(); 
+		idNumber = rand.nextInt(20) + 1;
 	}
 }
