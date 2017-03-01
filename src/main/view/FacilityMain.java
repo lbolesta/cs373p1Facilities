@@ -107,7 +107,7 @@ public class FacilityMain {
 		//addInspection() and listInspections()
 		System.out.println();
 		System.out.println("Adding inspection...");
-		
+
 		final Inspection defaultInspection = new Inspection("Water Inspection", ZonedDateTime.of(2015, 3, 1, 7, 0, 0, 0, ZoneId.systemDefault()));
 		final List<Inspection> inspections = new ArrayList<Inspection>();
 		inspections.add(defaultInspection);
