@@ -27,11 +27,16 @@ public class FacilityMain {
 		
 		System.out.println("Demonstrating facility methods...");
 		
-		Room defaultRoom = new Room("711", 40);
+		//using spring for dependency injection
+		Campus defaultCampus = (Campus) factory.getBean("campus");
+		//once this was added, threw a null pointer exception when went to demo usage methods
+		Room defaultRoom = (Room) factory.getBean("defaultRoom");
+		
+		//Room defaultRoom = new Room("711", 40);
 		Room defaultRoom2 = new Room("712", 50);
 		Building defaultBuilding = new Building("Corboy Law Center");
 		/*Campus defaultCampus = new Campus("Loyola University");*/
-		Campus defaultCampus = (Campus) factory.getBean("campus");
+		
 		
 		//addNewFacility()
 		System.out.println();

@@ -12,7 +12,6 @@ public class Campus implements IFacility<Building> {
 	private UnitInfo info;
 	private ScheduleManager schedule;
 	
-	//public Campus(){}
 	public Campus(String name){
 		subunits = new ArrayList<Building>();
 		this.info = new UnitInfo(name, 0);
