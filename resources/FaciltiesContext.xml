@@ -19,6 +19,25 @@
 		</constructor-arg>
 		</bean>
 		
+	<bean id="defaultRoom2" class="main.model.facility.Room">
+		<constructor-arg type="java.lang.String">
+			<value>712</value>
+		</constructor-arg>
+		<constructor-arg type="int">
+			<value>50</value>
+		</constructor-arg>
+		</bean>
+		
+	
+	<bean id="defaultBuilding" class="main.model.facility.Building">
+		<constructor-arg type="java.lang.String">
+			<value>Corboy Law Center</value>
+		</constructor-arg>
+		
+		</bean>
+		
+		
+		
 	
 		
 </beans>

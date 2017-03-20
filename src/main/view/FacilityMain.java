@@ -29,21 +29,23 @@ public class FacilityMain {
 		
 		//using spring for dependency injection
 		Campus defaultCampus = (Campus) factory.getBean("campus");
-		//once this was added, threw a null pointer exception when went to demo usage methods
 		Room defaultRoom = (Room) factory.getBean("defaultRoom");
+		Room defaultRoom2 = (Room) factory.getBean("defaultRoom2");
+		Building defaultBuilding = (Building) factory.getBean("defaultBuilding");
 		
 		//Room defaultRoom = new Room("711", 40);
-		Room defaultRoom2 = new Room("712", 50);
-		Building defaultBuilding = new Building("Corboy Law Center");
+		//Room defaultRoom2 = new Room("712", 50);
+		//Building defaultBuilding = new Building("Corboy Law Center");
 		/*Campus defaultCampus = new Campus("Loyola University");*/
 		
 		
 		//addNewFacility()
-		System.out.println();
+		System.out.println();//at this line in debugger default building has the name corboy law center
 		System.out.println("Adding facilities...");
 		defaultCampus.addNewFacility(defaultBuilding);
 		defaultCampus.getFacility("Corboy Law Center").addNewFacility(defaultRoom);
-		defaultCampus.getFacility("Corboy Law Center").addNewFacility(defaultRoom2);
+		defaultCampus.getFacility("Corboy Law Center").addNewFacility(defaultRoom2);//throws null pointer exception here
+		//not sure why because in debugger default room 2 had capacity and name
 		
 		//listFacilities() and requestAvailableCapacity()
 		System.out.println();
