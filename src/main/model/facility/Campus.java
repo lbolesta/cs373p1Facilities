@@ -3,12 +3,16 @@ package main.model.facility;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 public class Campus implements IFacility<Building> {
 
 	private List<Building> subunits;
 	private UnitInfo info;
 	private ScheduleManager schedule;
 	
+	//public Campus(){}
 	public Campus(String name){
 		subunits = new ArrayList<Building>();
 		this.info = new UnitInfo(name, 0);

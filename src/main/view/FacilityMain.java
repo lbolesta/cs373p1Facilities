@@ -5,6 +5,12 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.core.io.FileSystemResource;
+
 import main.model.facility.*;
 import main.model.maintenance.*;
 import main.model.use.*;
@@ -12,14 +18,20 @@ import main.model.use.*;
 
 public class FacilityMain {
 	public static void main (String args[]){
+
+		
+		ApplicationContext factory = new ClassPathXmlApplicationContext("FaciltiesContext.xml");
+		
 		
 		//FACILITY
+		
 		System.out.println("Demonstrating facility methods...");
 		
 		Room defaultRoom = new Room("711", 40);
 		Room defaultRoom2 = new Room("712", 50);
 		Building defaultBuilding = new Building("Corboy Law Center");
-		Campus defaultCampus = new Campus("Loyola University");
+		/*Campus defaultCampus = new Campus("Loyola University");*/
+		Campus defaultCampus = (Campus) factory.getBean("campus");
 		
 		//addNewFacility()
 		System.out.println();
