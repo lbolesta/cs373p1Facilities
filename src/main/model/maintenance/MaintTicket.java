@@ -1,23 +1,26 @@
 package main.model.maintenance;
 
 import java.time.Duration;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class MaintTicket {
 	private String description;
-	private ZonedDateTime requestTime;
-	private ZonedDateTime orderTime;
-	private ZonedDateTime resolveTime;
-	private ArrayList<Material> materials;
-	private ArrayList<Worker> workers;
 	
-	public MaintTicket(String description, ZonedDateTime requestTime){
+	private LocalDateTime requestTime;
+	private LocalDateTime orderTime;
+	private LocalDateTime resolveTime;
+	private ArrayList<Material> materials;
+	private Set<Worker> workers;
+	
+	public MaintTicket(String description, LocalDateTime requestTime){
 		this.description = description;
 		this.requestTime = requestTime;
 		materials = new ArrayList<Material>();
-		workers = new ArrayList<Worker>();
+		workers = new HashSet<Worker>();
 	}
 	
 	public String toString(){
@@ -33,15 +36,15 @@ public class MaintTicket {
 		return str;
 	}
 	
-	private boolean checkTime(ZonedDateTime req, ZonedDateTime ord, ZonedDateTime res){
+	private boolean checkTime(LocalDateTime req, LocalDateTime ord, LocalDateTime res){
 		return (isBefore(req, ord) && isBefore(ord, res));
 	}
 	
-	private boolean isBefore(ZonedDateTime a, ZonedDateTime b){
+	private boolean isBefore(LocalDateTime a, LocalDateTime b){
 		return (a != null && (b == null || a.isBefore(b)) );
 	}
 	
-	public String getState(ZonedDateTime relativeTime) {
+	public String getState(LocalDateTime relativeTime) {
 		String state = "";
 		if (orderTime == null) {
 			state = "REQUEST";
@@ -73,11 +76,11 @@ public class MaintTicket {
 		this.description = description;
 	}
 
-	public ZonedDateTime getRequestTime() {
+	public LocalDateTime getRequestTime() {
 		return requestTime;
 	}
 
-	public boolean setRequestTime(ZonedDateTime requestTime) {
+	public boolean setRequestTime(LocalDateTime requestTime) {
 		if (orderTime == null || checkTime(requestTime, orderTime, resolveTime)) {
 			this.requestTime = requestTime;
 			return true;
@@ -85,11 +88,11 @@ public class MaintTicket {
 		return false;
 	}
 
-	public ZonedDateTime getOrderTime() {
+	public LocalDateTime getOrderTime() {
 		return orderTime;
 	}
 
-	public boolean setOrderTime(ZonedDateTime orderTime) {
+	public boolean setOrderTime(LocalDateTime orderTime) {
 		if(checkTime(requestTime, orderTime, resolveTime)){
 			this.orderTime = orderTime;
 			return true;
@@ -97,11 +100,11 @@ public class MaintTicket {
 		return false;
 	}
 
-	public ZonedDateTime getResolveTime() {
+	public LocalDateTime getResolveTime() {
 		return resolveTime;
 	}
 
-	public boolean setResolveTime(ZonedDateTime resolveTime) {
+	public boolean setResolveTime(LocalDateTime resolveTime) {
 		if(checkTime(requestTime, orderTime, resolveTime)){
 			this.resolveTime = resolveTime;
 			return true;
@@ -125,12 +128,12 @@ public class MaintTicket {
 		this.materials.remove(material);
 	}
 
-	public List<Worker> getWorkers() {
+	public Set<Worker> getWorkers() {
 		return workers;
 	}
 
-	public void setWorkers(List<Worker> workers) {
-		this.workers = (ArrayList<Worker>) workers;
+	public void setWorkers(Set<Worker> workers) {
+		this.workers = (HashSet<Worker>) workers;
 	}
 	
 	public void addWorker(Worker worker) {

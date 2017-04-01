@@ -1,14 +1,14 @@
 package main.model.use;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 public class Reservation {
-	private ZonedDateTime startTime;
-	private ZonedDateTime endTime;
+	private LocalDateTime startTime;
+	private LocalDateTime endTime;
 	private User user;
 	
 	//TODO: don't construct if startTime <= endTime
-	public Reservation(ZonedDateTime startTime, ZonedDateTime endTime, User user){
+	public Reservation(LocalDateTime startTime, LocalDateTime endTime, User user){
 		this.setStartTime(startTime);
 		if( !this.setEndTime(endTime) ) {
 			return;
@@ -16,7 +16,7 @@ public class Reservation {
 		this.user = user;
 	}
 	
-	private boolean isBefore(ZonedDateTime a, ZonedDateTime b){
+	private boolean isBefore(LocalDateTime a, LocalDateTime b){
 		return ( b==null || a.isBefore(b) );
 	}
 	
@@ -28,11 +28,11 @@ public class Reservation {
 		return str;
 	}
 	
-	public ZonedDateTime getStartTime() {
+	public LocalDateTime getStartTime() {
 		return startTime;
 	}
 	
-	public boolean setStartTime(ZonedDateTime startTime) {
+	public boolean setStartTime(LocalDateTime startTime) {
 		if (isBefore(startTime, endTime)){
 			this.startTime = startTime;
 			return true;
@@ -40,11 +40,11 @@ public class Reservation {
 		return false;
 	}
 
-	public ZonedDateTime getEndTime() {
+	public LocalDateTime getEndTime() {
 		return endTime;
 	}
 
-	public boolean setEndTime(ZonedDateTime endTime) {
+	public boolean setEndTime(LocalDateTime endTime) {
 		if (isBefore(startTime, endTime)){
 			this.endTime = endTime;
 			return true;

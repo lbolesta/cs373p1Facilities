@@ -33,9 +33,31 @@
 		<constructor-arg type="java.lang.String">
 			<value>Corboy Law Center</value>
 		</constructor-arg>
+	</bean>
+	
+	<bean id="defaultMaintTicket" class="main.model.maintenance.MaintTicket">
 		
-		</bean>
-		
+	</bean>
+	
+	<bean id="MaterialA" class="main.model.maintenance.Material" name="brick">
+		<property name="name" value="brick" />
+		<property name="cost" value="2.00" />
+	</bean>
+	
+	<bean id="MaterialB" class="main.model.maintenance.Material" name="bulb">
+		<property name="name" value="bulb" />
+		<property name="cost" value="5.00" />
+	</bean>
+	
+	<bean id="WorkerA" class="main.model.maintenance.Worker" name="Bill">
+		<property name="name" value="Bill" />
+		<property name="wage" value="10" />
+	</bean>
+	
+	<bean id="WorkerB" class="main.model.maintenance.Worker" name="Bob">
+		<property name="name" value="Bob" />
+		<property name="wage" value="20" />
+	</bean>
 		
 		
 	

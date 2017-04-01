@@ -1,6 +1,6 @@
 package main.model.facility;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import main.model.maintenance.IFacilityMaintenance;
@@ -31,12 +31,12 @@ public class ScheduleManager implements IFacilityMaintenance<MaintTicket>, IFaci
 	}
 	
 	@Override
-	public void makeFacilityMaintRequest(String description, ZonedDateTime start) {
+	public void makeFacilityMaintRequest(String description, LocalDateTime start) {
 		maint.makeFacilityMaintRequest(description, start);
 	}
 	
 	@Override
-	public boolean scheduleMaintenance(MaintTicket ticket, ZonedDateTime startTime, ZonedDateTime endTime) {
+	public boolean scheduleMaintenance(MaintTicket ticket, LocalDateTime startTime, LocalDateTime endTime) {
 		if(isUnderMaintenance(startTime, endTime)) {
 			return false;
 		}
@@ -53,11 +53,11 @@ public class ScheduleManager implements IFacilityMaintenance<MaintTicket>, IFaci
 		return maint.calcMaintenanceCostForFacility();
 	}
 	@Override
-	public float calcProblemRateForFacility(ZonedDateTime since, ZonedDateTime til) {
+	public float calcProblemRateForFacility(LocalDateTime since, LocalDateTime til) {
 		return maint.calcProblemRateForFacility(since, til);
 	}
 	@Override
-	public float calcDownTimeForFacility(ZonedDateTime since, ZonedDateTime til) {
+	public float calcDownTimeForFacility(LocalDateTime since, LocalDateTime til) {
 		return maint.calcDownTimeForFacility(since, til);
 	}
 	@Override
@@ -73,15 +73,15 @@ public class ScheduleManager implements IFacilityMaintenance<MaintTicket>, IFaci
 		return maint.listFacilityProblems();
 	}
 	@Override
-	public boolean isInUseDuringInterval(ZonedDateTime startTime, ZonedDateTime endTime) {
+	public boolean isInUseDuringInterval(LocalDateTime startTime, LocalDateTime endTime) {
 		return usage.isInUseDuringInterval(startTime, endTime);
 	}
 	@Override
-	public boolean assignFacilityToUse(ZonedDateTime startTime, ZonedDateTime endTime, User user) {
+	public boolean assignFacilityToUse(LocalDateTime startTime, LocalDateTime endTime, User user) {
 		return usage.assignFacilityToUse(startTime, endTime, user);
 	}
 	@Override
-	public void vacateFacility(ZonedDateTime startTime, ZonedDateTime endTime) {
+	public void vacateFacility(LocalDateTime startTime, LocalDateTime endTime) {
 		usage.vacateFacility(startTime, endTime);
 	}
 	@Override
@@ -93,14 +93,14 @@ public class ScheduleManager implements IFacilityMaintenance<MaintTicket>, IFaci
 		return usage.listActualUsage();
 	}
 	@Override
-	public float calcUsageRate(ZonedDateTime since, ZonedDateTime til) {
+	public float calcUsageRate(LocalDateTime since, LocalDateTime til) {
 		return usage.calcUsageRate(since, til);
 	}
 	
-	private boolean isUnderMaintenance(ZonedDateTime startTime, ZonedDateTime endTime) {
+	private boolean isUnderMaintenance(LocalDateTime startTime, LocalDateTime endTime) {
 		for (MaintTicket ticket : listMaintenance()) {
-			ZonedDateTime oStart = ticket.getOrderTime();
-			ZonedDateTime oEnd = ticket.getResolveTime();
+			LocalDateTime oStart = ticket.getOrderTime();
+			LocalDateTime oEnd = ticket.getResolveTime();
 			if (startTime.isBefore(oStart) && (endTime.isBefore(oStart) || endTime.isEqual(oStart))) {
 				break;
 			} else if (endTime.isAfter(oEnd) && (startTime.isAfter(oEnd) || startTime.isEqual(oEnd))) {

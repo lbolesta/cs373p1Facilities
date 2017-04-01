@@ -1,15 +1,16 @@
 
 package main.view;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.xml.XmlBeanFactory;
+//import org.springframework.beans.factory.BeanFactory;
+//import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.core.io.FileSystemResource;
+//import org.springframework.core.io.FileSystemResource;
 
 import main.model.facility.*;
 import main.model.maintenance.*;
@@ -20,24 +21,24 @@ public class FacilityMain {
 	public static void main (String args[]){
 
 		
-		ApplicationContext factory = new ClassPathXmlApplicationContext("FaciltiesContext.xml");
+		ApplicationContext context = new ClassPathXmlApplicationContext("FacilitiesContext.xml");
 		
 		
 		//FACILITY
 		
-		System.out.println("Demonstrating facility methods...");
+		System.out.println("Demonstrating facility methods");
 		
 		//using spring for dependency injection
-		Campus defaultCampus = (Campus) factory.getBean("campus");
-		Room defaultRoom = (Room) factory.getBean("defaultRoom");
-		Room defaultRoom2 = (Room) factory.getBean("defaultRoom2");
-		Building defaultBuilding = (Building) factory.getBean("defaultBuilding");
-		
-		//Room defaultRoom = new Room("711", 40);
-		//Room defaultRoom2 = new Room("712", 50);
+		Campus defaultCampus = (Campus) context.getBean("campus");
+		Room defaultRoom = (Room) context.getBean("defaultRoom");
+		Room defaultRoom2 = (Room) context.getBean("defaultRoom2");
+		Building defaultBuilding = (Building) context.getBean("defaultBuilding");
 		//Building defaultBuilding = new Building("Corboy Law Center");
-		/*Campus defaultCampus = new Campus("Loyola University");*/
 		
+		/*Room defaultRoom = new Room("711", 40);
+		Room defaultRoom2 = new Room("712", 50);
+		Building defaultBuilding = new Building("Corboy Law Center");
+		Campus defaultCampus = new Campus("Loyola University");*/
 		
 		//addNewFacility()
 		System.out.println();//at this line in debugger default building has the name corboy law center
@@ -85,8 +86,8 @@ public class FacilityMain {
 		System.out.println();
 		System.out.println("Demonstrating usage methods...");
 		
-		final ZonedDateTime defaultStartTime = ZonedDateTime.of(2016, 3, 1, 7, 0, 0, 0, ZoneId.systemDefault());
-		final ZonedDateTime defaultEndTime = ZonedDateTime.of(2016, 3, 1, 10, 0, 0, 0, ZoneId.systemDefault());
+		final LocalDateTime defaultStartTime = LocalDateTime.of(2016, 3, 1, 7, 0, 0, 0);
+		final LocalDateTime defaultEndTime = LocalDateTime.of(2016, 3, 1, 10, 0, 0, 0);
 		final User defaultUser = new User("Anna");
 		
 		Room room = defaultCampus.getFacility("Corboy Law Center").getFacility("711");
@@ -112,8 +113,8 @@ public class FacilityMain {
 		//calcUsageRate()
 		System.out.println();
 		System.out.println("Usage rate between 6 & 12?");
-		final ZonedDateTime defaultSinceTime = ZonedDateTime.of(2016, 3, 1, 6, 0, 0, 0, ZoneId.systemDefault());
-		final ZonedDateTime defaultTilTime = ZonedDateTime.of(2016, 3, 1, 12, 0, 0, 0, ZoneId.systemDefault());
+		final LocalDateTime defaultSinceTime = LocalDateTime.of(2016, 3, 1, 6, 0, 0, 0);
+		final LocalDateTime defaultTilTime = LocalDateTime.of(2016, 3, 1, 12, 0, 0, 0);
 		System.out.println(schedule.calcUsageRate(defaultSinceTime, defaultTilTime));
 		
 		//vacateFacility()
@@ -127,7 +128,7 @@ public class FacilityMain {
 		System.out.println();
 		System.out.println("Adding inspection...");
 
-		final Inspection defaultInspection = new Inspection("Water Inspection", ZonedDateTime.of(2015, 3, 1, 7, 0, 0, 0, ZoneId.systemDefault()));
+		final Inspection defaultInspection = new Inspection("Water Inspection", LocalDateTime.of(2015, 3, 1, 7, 0, 0, 0));
 		final List<Inspection> inspections = new ArrayList<Inspection>();
 		inspections.add(defaultInspection);
 		
@@ -157,8 +158,8 @@ public class FacilityMain {
 		System.out.println("Scheduling maintenance order...");
 		MaintTicket defaultTicket = schedule.getMaint().getMaintTicket("Replace lightbulb");
 		
-		Material bulb = new Material("lightbulb", 2.50);
-		Worker Bob = new Worker("Bob", 15);
+		Material bulb = (Material) context.getBean("bulb");
+		Worker Bob = (Worker) context.getBean("Bob");
 		
 		defaultTicket.addMaterial(bulb);
 		defaultTicket.addWorker(Bob);
@@ -186,6 +187,8 @@ public class FacilityMain {
 		for (String p : schedule.listFacilityProblems()){
 			System.out.println(p);
 		}
+		
+		((ClassPathXmlApplicationContext) context).close();
 	}
 
 }

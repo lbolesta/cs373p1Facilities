@@ -2,8 +2,7 @@ package test.model.use;
 
 import static org.junit.Assert.*;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 import org.junit.After;
 import org.junit.Before;
@@ -14,8 +13,8 @@ import main.model.use.User;
 
 public class ReservationTest {
 	
-	final ZonedDateTime defaultStartTime = ZonedDateTime.of(2016, 3, 1, 7, 0, 0, 0, ZoneId.systemDefault());
-	final ZonedDateTime defaultEndTime = ZonedDateTime.of(2016, 3, 1, 10, 0, 0, 0, ZoneId.systemDefault());
+	final LocalDateTime defaultStartTime = LocalDateTime.of(2016, 3, 1, 7, 0, 0, 0);
+	final LocalDateTime defaultEndTime = LocalDateTime.of(2016, 3, 1, 10, 0, 0, 0);
 	final User defaultUser = new User("Anna");
 	final Reservation defaultReservation = new Reservation(defaultStartTime, defaultEndTime, defaultUser);
 	

@@ -4,15 +4,6 @@ public class Material {
 	private String name;
 	private double cost;
 	
-	public Material(){
-		cost = 0;
-	}
-	
-	public Material(String name, double cost) {
-		this.name = name;
-		this.cost = cost;
-	}
-	
 	public String getName() {
 		return name;
 	}

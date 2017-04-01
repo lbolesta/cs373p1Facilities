@@ -2,12 +2,13 @@ package test.model.maintenance;
 
 import static org.junit.Assert.*;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import main.model.maintenance.MaintTicket;
 import main.model.maintenance.Material;
@@ -15,14 +16,16 @@ import main.model.maintenance.Worker;
 
 public class MaintTicketTest {
 	
-	final ZonedDateTime defaultRequestTime = ZonedDateTime.of(2016, 3, 1, 7, 0, 0, 0, ZoneId.systemDefault());
+	final ApplicationContext context = new ClassPathXmlApplicationContext("FacilitiesContext.xml");
+	
+	final LocalDateTime defaultRequestTime = LocalDateTime.of(2016, 3, 1, 7, 0, 0, 0);
 	final MaintTicket defaultTicket = new MaintTicket("replace lightbulb",defaultRequestTime);
-	final ZonedDateTime defaultOrderTime = ZonedDateTime.of(2016, 3, 1, 8, 0, 0, 0, ZoneId.systemDefault());
-	final ZonedDateTime defaultResolveTime = ZonedDateTime.of(2016, 3, 1, 10, 0, 0, 0, ZoneId.systemDefault());
-	Material brick = new Material("brick", 2.50);
-	Material mortar = new Material("mortar", 5.75);
-	Worker Bill = new Worker("Bill", 1);
-	Worker Bob = new Worker("Bob", 15);
+	final LocalDateTime defaultOrderTime = LocalDateTime.of(2016, 3, 1, 8, 0, 0, 0);
+	final LocalDateTime defaultResolveTime = LocalDateTime.of(2016, 3, 1, 10, 0, 0, 0);
+	final Material brick = (Material) context.getBean("brick");
+	final Material bulb = (Material) context.getBean("bulb");
+	final Worker Bill = (Worker) context.getBean("Bill");
+	final Worker Bob = (Worker) context.getBean("Bob");
 
 	@Before
 	public void setUp() throws Exception {
@@ -35,7 +38,7 @@ public class MaintTicketTest {
 	@Test
 	public void testGetState() {
 		MaintTicket ticket = defaultTicket;
-		ZonedDateTime time = ZonedDateTime.of(2016, 3, 1, 7, 30, 0, 0, ZoneId.systemDefault());
+		LocalDateTime time = LocalDateTime.of(2016, 3, 1, 7, 30, 0, 0);
 		assertEquals(ticket.getState(time), "REQUEST");
 		ticket.setOrderTime(defaultOrderTime);
 		ticket.setResolveTime(defaultResolveTime);
@@ -53,9 +56,9 @@ public class MaintTicketTest {
 		assertEquals(ticket.calcCost(), 0.0, 0);
 		ticket.addMaterial(brick);
 		ticket.addMaterial(brick);
-		assertEquals(ticket.calcCost(), 5, 0);
+		assertEquals(ticket.calcCost(), 4, 0);
 		ticket.addWorker(Bob);
-		assertEquals(ticket.calcCost(), 35, 0);
+		assertEquals(ticket.calcCost(), 44, 0);
 	}
 
 	@Test
@@ -103,13 +106,13 @@ public class MaintTicketTest {
 		ticket.setResolveTime(defaultResolveTime);
 		assertTrue(ticket.getMaterials().isEmpty());
 		ticket.addMaterial(brick);
-		ticket.addMaterial(mortar);
-		ticket.addMaterial(brick);
-		assertEquals(ticket.calcCost(), 10.75, 0);
-		ticket.removeMaterial(mortar);
-		assertEquals(ticket.calcCost(), 5, 0);
-		ticket.removeMaterial(mortar);
-		assertEquals(ticket.calcCost(), 5, 0);
+		ticket.addMaterial(bulb);
+		ticket.addMaterial(bulb);
+		assertEquals(ticket.calcCost(), 12, 0);
+		ticket.removeMaterial(bulb);
+		assertEquals(ticket.calcCost(), 7, 0);
+		ticket.removeMaterial(bulb);
+		assertEquals(ticket.calcCost(), 2, 0);
 	}
 
 	@Test
@@ -121,13 +124,13 @@ public class MaintTicketTest {
 		ticket.addWorker(Bill);
 		ticket.addWorker(Bob);
 		ticket.addWorker(Bill);
-		assertEquals(ticket.calcCost(), 34, 0);
+		assertEquals(ticket.calcCost(), 60, 0); // can only add worker once
 		ticket.removeWorker(Bob);
-		assertEquals(ticket.calcCost(), 4, 0);
+		assertEquals(ticket.calcCost(), 20, 0);
 		ticket.removeWorker(Bob);
-		assertEquals(ticket.calcCost(), 4, 0);
+		assertEquals(ticket.calcCost(), 20, 0);
 		ticket.removeWorker(Bill);
-		assertEquals(ticket.calcCost(), 2, 0);
+		assertEquals(ticket.calcCost(), 0, 0);
 	}
 
 }

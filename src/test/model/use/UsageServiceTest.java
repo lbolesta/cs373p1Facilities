@@ -3,8 +3,7 @@ package test.model.use;
 import static org.junit.Assert.*;
 
 import java.util.List;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import org.junit.After;
@@ -17,13 +16,13 @@ import main.model.use.User;
 
 public class UsageServiceTest {
 	
-	final ZonedDateTime defaultSinceTime = ZonedDateTime.of(2016, 3, 1, 6, 0, 0, 0, ZoneId.systemDefault());
-	final ZonedDateTime defaultStartTime = ZonedDateTime.of(2016, 3, 1, 7, 0, 0, 0, ZoneId.systemDefault());
-	final ZonedDateTime defaultEndTime = ZonedDateTime.of(2016, 3, 1, 9, 0, 0, 0, ZoneId.systemDefault());
-	final ZonedDateTime defaultTilTime = ZonedDateTime.of(2016, 3, 1, 11, 0, 0, 0, ZoneId.systemDefault());
+	final LocalDateTime defaultSinceTime = LocalDateTime.of(2016, 3, 1, 6, 0, 0, 0);
+	final LocalDateTime defaultStartTime = LocalDateTime.of(2016, 3, 1, 7, 0, 0, 0);
+	final LocalDateTime defaultEndTime = LocalDateTime.of(2016, 3, 1, 9, 0, 0, 0);
+	final LocalDateTime defaultTilTime = LocalDateTime.of(2016, 3, 1, 11, 0, 0, 0);
 	final UsageService defaultUsageService = new UsageService();
 	final User defaultUser = new User("Annie");
-	final Inspection defaultInspection = new Inspection("Water Inspection", ZonedDateTime.of(2015, 3, 1, 7, 0, 0, 0, ZoneId.systemDefault()));
+	final Inspection defaultInspection = new Inspection("Water Inspection", LocalDateTime.of(2015, 3, 1, 7, 0, 0, 0));
 	
 	@Before
 	public void setUp() throws Exception {

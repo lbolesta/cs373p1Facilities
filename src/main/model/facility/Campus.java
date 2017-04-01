@@ -40,7 +40,7 @@ public class Campus implements IFacility<Building> {
 	
 	public Building getFacility(String name){
 		for (Building b : listFacilities()){
-			if (b.getFacilityInformation().getName() == name){
+			if (b.getFacilityInformation().getName().equals(name)){
 				return b;
 			}
 		}
@@ -51,6 +51,7 @@ public class Campus implements IFacility<Building> {
 		if (!listFacilities().contains(facility)){
 			listFacilities().add(facility);
 			getFacilityInformation().setCapacity(requestAvailableCapacity());
+			System.out.println("Successfully added");
 		}
 	}
 	

@@ -1,12 +1,12 @@
 package main.model.use;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 public class Inspection {
-	private ZonedDateTime date;
+	private LocalDateTime date;
 	private String description;
 	
-	public Inspection(String description, ZonedDateTime date) {
+	public Inspection(String description, LocalDateTime date) {
 		this.description = description;
 		this.date = date;
 	}
@@ -18,11 +18,11 @@ public class Inspection {
 		return str;
 	}
 	
-	public ZonedDateTime getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 	
-	public void setDate(ZonedDateTime date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 

@@ -2,8 +2,7 @@ package test.model.facility;
 
 import static org.junit.Assert.*;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 import org.junit.After;
 import org.junit.Before;
@@ -22,8 +21,8 @@ public class ScheduleManagerTest {
 	final ScheduleManager defaultSchedule = defaultRoom.getScheduleManager();
 	final MaintenanceServiceTest maintTest = new MaintenanceServiceTest();
 	final UsageServiceTest useTest = new UsageServiceTest();
-	final ZonedDateTime defaultStartTime = ZonedDateTime.of(2016, 3, 1, 7, 0, 0, 0, ZoneId.systemDefault());
-	final ZonedDateTime defaultEndTime = ZonedDateTime.of(2016, 3, 1, 9, 0, 0, 0, ZoneId.systemDefault());
+	final LocalDateTime defaultStartTime = LocalDateTime.of(2016, 3, 1, 7, 0, 0, 0);
+	final LocalDateTime defaultEndTime = LocalDateTime.of(2016, 3, 1, 9, 0, 0, 0);
 	final User defaultUser = new User("Anna");
 
 	@Before

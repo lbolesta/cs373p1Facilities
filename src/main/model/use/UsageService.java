@@ -1,7 +1,7 @@
 package main.model.use;
 
 import java.time.Duration;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,10 +16,10 @@ public class UsageService implements IFacilityUse<Reservation, Inspection> {
 	}
 
 	@Override
-	public boolean isInUseDuringInterval(ZonedDateTime startTime, ZonedDateTime endTime) {
+	public boolean isInUseDuringInterval(LocalDateTime startTime, LocalDateTime endTime) {
 		for (Reservation reservation : reservations) {
-			ZonedDateTime resStart = reservation.getStartTime();
-			ZonedDateTime resEnd = reservation.getEndTime();
+			LocalDateTime resStart = reservation.getStartTime();
+			LocalDateTime resEnd = reservation.getEndTime();
 			if (startTime.isBefore(resStart) && (endTime.isBefore(resStart) || endTime.isEqual(resStart))) {
 				break;
 			} else if (endTime.isAfter(resEnd) && (startTime.isAfter(resEnd) || startTime.isEqual(resEnd))) {
@@ -32,7 +32,7 @@ public class UsageService implements IFacilityUse<Reservation, Inspection> {
 	}
 
 	@Override
-	public boolean assignFacilityToUse(ZonedDateTime startTime, ZonedDateTime endTime, User user) {
+	public boolean assignFacilityToUse(LocalDateTime startTime, LocalDateTime endTime, User user) {
 		boolean inUse = isInUseDuringInterval(startTime, endTime);
 		if(!inUse){
 			Reservation reservation = new Reservation(startTime, endTime, user);
@@ -42,13 +42,13 @@ public class UsageService implements IFacilityUse<Reservation, Inspection> {
 	}
 
 	@Override
-	public void vacateFacility(ZonedDateTime startTime, ZonedDateTime endTime) {
+	public void vacateFacility(LocalDateTime startTime, LocalDateTime endTime) {
 		boolean inUse = isInUseDuringInterval(startTime, endTime);
 		if(inUse) {
 			List<Reservation> removals = new ArrayList<Reservation>();
 			for (Reservation reservation : reservations){
-				ZonedDateTime resStart = reservation.getStartTime();
-				ZonedDateTime resEnd = reservation.getEndTime();
+				LocalDateTime resStart = reservation.getStartTime();
+				LocalDateTime resEnd = reservation.getEndTime();
 				if (resEnd.isAfter(startTime) && resStart.isBefore(endTime)) {
 					removals.add(reservation);
 				}
@@ -70,7 +70,7 @@ public class UsageService implements IFacilityUse<Reservation, Inspection> {
 	}
 
 	@Override
-	public float calcUsageRate(ZonedDateTime since, ZonedDateTime til) {
+	public float calcUsageRate(LocalDateTime since, LocalDateTime til) {
 		float usageTime = 0;
 		float total = (Duration.between(since, til)).toHours();
 		for (Reservation reservation : reservations){

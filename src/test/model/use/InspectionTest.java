@@ -6,13 +6,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import main.model.use.Inspection;
 
 public class InspectionTest {
 	
-	final ZonedDateTime defaultDate = ZonedDateTime.of(2017, 3, 1, 8, 0, 0, 0, ZoneId.systemDefault());
+	final LocalDateTime defaultDate = LocalDateTime.of(2017, 3, 1, 8, 0, 0, 0);
 	final String defaultDescription = "Water Inspection";
 	final String defaultDescription2 = "Gas inspection";
 	final Inspection defaultInspection = new Inspection(defaultDescription, defaultDate);

@@ -1,7 +1,7 @@
 package main.model.maintenance;
 
 import java.time.Duration;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,14 +14,14 @@ public class MaintenanceService implements IFacilityMaintenance<MaintTicket> {
 	}
 	
 	@Override
-	public void makeFacilityMaintRequest(String description, ZonedDateTime start) {
+	public void makeFacilityMaintRequest(String description, LocalDateTime start) {
 		MaintTicket ticket = new MaintTicket(description, start);
 		tickets.add(ticket);
 	}
 	
 	public MaintTicket getMaintTicket(String description) {
 		for (MaintTicket t : tickets) {
-			if (t.getState(ZonedDateTime.now()) == "REQUEST" && t.getDescription() == description) {
+			if (t.getState(LocalDateTime.now()) == "REQUEST" && t.getDescription() == description) {
 				return t;
 			}
 		}
@@ -29,7 +29,7 @@ public class MaintenanceService implements IFacilityMaintenance<MaintTicket> {
 	}
 
 	@Override
-	public boolean scheduleMaintenance(MaintTicket ticket, ZonedDateTime startTime, ZonedDateTime endTime) {
+	public boolean scheduleMaintenance(MaintTicket ticket, LocalDateTime startTime, LocalDateTime endTime) {
 		ticket.setOrderTime(startTime);
 		ticket.setResolveTime(endTime);
 		return true;
@@ -45,13 +45,13 @@ public class MaintenanceService implements IFacilityMaintenance<MaintTicket> {
 	}
 
 	@Override
-	public float calcProblemRateForFacility(ZonedDateTime since, ZonedDateTime til) {
+	public float calcProblemRateForFacility(LocalDateTime since, LocalDateTime til) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public float calcDownTimeForFacility(ZonedDateTime since, ZonedDateTime til) {
+	public float calcDownTimeForFacility(LocalDateTime since, LocalDateTime til) {
 		float downTime = 0;
 		float total = (Duration.between(since, til)).toHours();
 		for (MaintTicket t : tickets) {
@@ -75,7 +75,7 @@ public class MaintenanceService implements IFacilityMaintenance<MaintTicket> {
 	public List<MaintTicket> listMaintRequests() {
 		List<MaintTicket> requests = new ArrayList<MaintTicket>();
 		for (MaintTicket t : tickets) {
-			if (t.getState(ZonedDateTime.now()) == "REQUEST") {
+			if (t.getState(LocalDateTime.now()) == "REQUEST") {
 				requests.add(t);
 			}
 		}
@@ -86,7 +86,7 @@ public class MaintenanceService implements IFacilityMaintenance<MaintTicket> {
 	public List<MaintTicket> listMaintenance() {
 		List<MaintTicket> orders = new ArrayList<MaintTicket>();
 		for (MaintTicket t : tickets) {
-			if (t.getState(ZonedDateTime.now()) == "ORDER" || t.getState(ZonedDateTime.now()) == "RESOLVED") {
+			if (t.getState(LocalDateTime.now()) == "ORDER" || t.getState(LocalDateTime.now()) == "RESOLVED") {
 				orders.add(t);
 			}
 		}

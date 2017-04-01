@@ -33,7 +33,7 @@ public class Building implements IFacility<Room> {
 	
 	public Room getFacility(String name){
 		for (Room r : listFacilities()){
-			if (r.getFacilityInformation().getName() == name){
+			if (r.getFacilityInformation().getName().equals(name)){
 				return r;
 			}
 		}
@@ -45,7 +45,7 @@ public class Building implements IFacility<Room> {
 	}
 	
 	public void addNewFacility(Room facility) {
-		if (!listFacilities().contains(facility)){
+		if (!this.listFacilities().contains(facility)){
 			listFacilities().add(facility);
 			getFacilityInformation().setCapacity(requestAvailableCapacity());
 		}
