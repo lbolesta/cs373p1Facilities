@@ -11,7 +11,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import main.model.maintenance.MaintTicket;
-import main.model.maintenance.MaintenanceServiceImpl;
+import main.model.maintenance.MaintService;
 import main.model.maintenance.Material;
 import main.model.maintenance.Worker;
 
@@ -19,30 +19,21 @@ public class MaintenanceServiceTest {
 	
 	final ApplicationContext context = new ClassPathXmlApplicationContext("FacilitiesContext.xml");
 	
-	final MaintenanceServiceImpl defaultMaintenanceService = new MaintenanceServiceImpl();
-	final LocalDateTime defaultSinceTime = LocalDateTime.parse("2016-03-01T06:00:00");
-	final LocalDateTime defaultRequestTime = LocalDateTime.parse("2016-03-01T07:00:00");
-	final LocalDateTime defaultOrderTime = LocalDateTime.parse("2016-03-01T08:00:00");
-	final LocalDateTime defaultResolveTime = LocalDateTime.parse("2016-03-01T10:00:00");
-	final LocalDateTime defaultTilTime = LocalDateTime.parse("2016-03-01T12:00:00");
-	final Material brick = (Material) context.getBean("material");
-	final Material lightbulb = (Material) context.getBean("material");
-	final Worker Bill = (Worker) context.getBean("worker");
-	final Worker Bob = (Worker) context.getBean("worker");
+	final LocalDateTime since = LocalDateTime.parse("2016-03-01T06:00:00");
+	final LocalDateTime request = LocalDateTime.parse("2016-03-01T07:00:00");
+	final LocalDateTime order = LocalDateTime.parse("2016-03-01T08:00:00");
+	final LocalDateTime resolve = LocalDateTime.parse("2016-03-01T10:00:00");
+	final LocalDateTime til = LocalDateTime.parse("2016-03-01T12:00:00");
+	final Material brick = (Material) context.getBean("brick");
+	final Material lightbulb = (Material) context.getBean("lightbulb");
+	final Worker Bill = (Worker) context.getBean("Bill");
+	final Worker Bob = (Worker) context.getBean("Bob");
 	
-	private MaintenanceServiceImpl maint;
+	private MaintService maint;
 
 	@Before
 	public void setUp() throws Exception {
-		maint = defaultMaintenanceService;
-		brick.setName("brick");
-		brick.setCost(2);
-		lightbulb.setName("lightbulb");
-		lightbulb.setCost(5);
-		Bill.setName("Bill");
-		Bill.setWage(10);
-		Bob.setName("Bob");
-		Bob.setWage(20);
+		maint = (MaintService) context.getBean("maintService");
 	}
 
 	@After
@@ -53,13 +44,13 @@ public class MaintenanceServiceTest {
 	@Test
 	public void testMakeFacilityMaintRequest() {
 		assertTrue(maint.listMaintRequests().isEmpty());
-		maint.makeFacilityMaintRequest("replace lightbulb", defaultRequestTime);
+		maint.makeFacilityMaintRequest("replace lightbulb", request);
 		assertFalse(maint.listMaintRequests().isEmpty());
 	}
 	
 	@Test
 	public void testGetFacilityMaintRequest() {
-		maint.makeFacilityMaintRequest("replace lightbulb", defaultRequestTime);
+		maint.makeFacilityMaintRequest("replace lightbulb", request);
 		assertNotNull(maint.getMaintTicket("replace lightbulb"));
 		assertNull(maint.getMaintTicket("fix pipes"));
 	}
@@ -67,18 +58,18 @@ public class MaintenanceServiceTest {
 	@Test
 	public void testScheduleMaintenance() {
 		assertTrue(maint.listMaintenance().isEmpty());
-		maint.makeFacilityMaintRequest("replace lightbulb", defaultRequestTime);
+		maint.makeFacilityMaintRequest("replace lightbulb", request);
 		MaintTicket ticket = maint.getMaintTicket("replace lightbulb");
-		maint.scheduleMaintenance(ticket, defaultOrderTime, defaultResolveTime);
+		maint.scheduleMaintenance(ticket, order, resolve);
 		assertFalse(maint.listMaintenance().isEmpty());
 	}
 
 	@Test
 	public void testCalcMaintenanceCostForFacility() {
 		
-		maint.makeFacilityMaintRequest("replace lightbulb", defaultRequestTime);
+		maint.makeFacilityMaintRequest("replace lightbulb", request);
 		MaintTicket ticket = maint.getMaintTicket("replace lightbulb");
-		maint.scheduleMaintenance(ticket, defaultOrderTime, defaultResolveTime);
+		maint.scheduleMaintenance(ticket, order, resolve);
 		ticket.addWorker(Bill);
 		ticket.addWorker(Bob);
 		ticket.addMaterial(brick);
@@ -95,10 +86,10 @@ public class MaintenanceServiceTest {
 
 	@Test
 	public void testCalcDownTimeForFacility() {
-		maint.makeFacilityMaintRequest("replace lightbulb", defaultRequestTime);
+		maint.makeFacilityMaintRequest("replace lightbulb", request);
 		MaintTicket ticket = maint.getMaintTicket("replace lightbulb");
-		maint.scheduleMaintenance(ticket, defaultOrderTime, defaultResolveTime);
-		assertEquals(maint.calcDownTimeForFacility(defaultSinceTime, defaultTilTime), .5 ,0);
+		maint.scheduleMaintenance(ticket, order, resolve);
+		assertEquals(maint.calcDownTimeForFacility(since, til), .5 ,0);
 	}
 	
 	@Test

@@ -7,61 +7,51 @@ import java.time.LocalDateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import main.model.use.Reservation;
 import main.model.use.User;
 
 public class ReservationTest {
 	
-	final LocalDateTime defaultStartTime = LocalDateTime.of(2016, 3, 1, 7, 0, 0, 0);
-	final LocalDateTime defaultEndTime = LocalDateTime.of(2016, 3, 1, 10, 0, 0, 0);
-	final User defaultUser = new User("Anna");
-	final Reservation defaultReservation = new Reservation(defaultStartTime, defaultEndTime, defaultUser);
+	final ApplicationContext context = new ClassPathXmlApplicationContext("FacilitiesContext.xml");
+	final private LocalDateTime start = LocalDateTime.parse("2016-03-01T07:00:00");
+	final private LocalDateTime end = LocalDateTime.parse("2016-03-01T09:00:00");
+	private Reservation r;
 	
 	@Before
 	public void setUp() throws Exception {
+		r = (Reservation) context.getBean("defaultReservation");
 	}
 
 	@After
 	public void tearDown() throws Exception {
 	}
-	
-	@Test
-	public void testReservation(){
-		Reservation r = defaultReservation;
-		Reservation s = new Reservation(defaultEndTime, defaultStartTime, defaultUser);
-		assertEquals(r, defaultReservation);
-		assertEquals(s.getStartTime(), defaultEndTime);
-		assertNotEquals(s.getEndTime(), defaultStartTime);
-		assertNull(s.getEndTime());
-	}
 
 	@Test
 	public void testGetAndSetStartTime() {
-		Reservation r = defaultReservation;
-		assertEquals(r.getStartTime(), defaultStartTime);
-		assertTrue(r.setStartTime(defaultStartTime.plusHours(1)));
-		assertEquals(r.getStartTime(), defaultStartTime.plusHours(1));
-		assertFalse(r.setStartTime(defaultStartTime.plusHours(4))); //try to set start time after end time 
-		assertEquals(r.getStartTime(), defaultStartTime.plusHours(1));
+		assertEquals(r.getStartTime(), start);
+		r.setStartTime(start.plusHours(1));
+		assertEquals(r.getStartTime(), start.plusHours(1));
+		r.setStartTime(start.plusHours(4)); //try to set start time after end time 
+		assertEquals(r.getStartTime(), start.plusHours(1));
 	}
 
 	@Test
 	public void testGetAndSetEndTime() {
-		Reservation r = defaultReservation;
-		assertEquals(r.getEndTime(), defaultEndTime);
-		assertTrue(r.setEndTime(defaultEndTime.plusHours(1)));
-		assertEquals(r.getEndTime(), defaultEndTime.plusHours(1));
-		assertFalse(r.setEndTime(defaultEndTime.minusHours(4))); //try to set end time before start time 
-		assertEquals(r.getEndTime(), defaultEndTime.plusHours(1));
+		assertEquals(r.getEndTime(), end);
+		r.setEndTime(end.plusHours(1));
+		assertEquals(r.getEndTime(), end.plusHours(1));
+		r.setEndTime(end.minusHours(4)); //try to set end time before start time
+		assertEquals(r.getEndTime(), end.plusHours(1));
 	}
 
 	@Test
 	public void testGetAndSetUser() {
-		Reservation r = defaultReservation;
-		assertEquals(r.getUser(), defaultUser);
 		assertEquals(r.getUser().getName(), "Anna");
-		User u = new User("Brock");
+		User u = (User) context.getBean("user");
+		u.setName("Brock");
 		r.setUser(u);
 		assertEquals(r.getUser(), u);
 		assertEquals(r.getUser().getName(), "Brock");

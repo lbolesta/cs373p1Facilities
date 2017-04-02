@@ -12,7 +12,8 @@
 	      </map>
 	   </property>
 	</bean>
-		
+	
+	<!--  
 	<bean id="campus" class="main.model.facility.Campus">
 		<constructor-arg value = "Loyola"></constructor-arg>
 	</bean>
@@ -40,42 +41,40 @@
 			<value>Corboy Law Center</value>
 		</constructor-arg>
 	</bean>
+	-->
 	
-	<bean id="maintTicket" class="main.model.maintenance.MaintTicketImpl" scope="prototype">
-		<property name="materials">
-			<list value-type="material" />
-		</property>
-		<property name="workers">
-			<list value-type="worker" />
-		</property>
-	</bean>
+	<bean id="maintService" class="main.model.maintenance.MaintServiceImpl" scope="prototype" />
 	
-	<bean id="defaultMaintTicket" class="main.model.maintenance.MaintTicketImpl">
-		<property name="description" value="replace lightbulb"/>
-		<property name="requestTime" value="2016-03-01T07:00:00" />
-		<property name="materials">
-			<list value-type="material" />
-		</property>
-		<property name="workers">
-			<list value-type="worker" />
-		</property>
-	</bean>
+	<bean id="maintTicket" class="main.model.maintenance.MaintTicketImpl" scope="prototype" />
 	
 	<bean id="material" class="main.model.maintenance.MaterialImpl" scope="prototype" />
 	
-	<!-- 
+	<bean id="worker" class="main.model.maintenance.WorkerImpl" scope="prototype" />
+	
+	<bean id="usageService" class="main.model.use.UsageServiceImpl" scope="prototype" />
+	
+	<bean id="inspection" class="main.model.use.InspectionImpl" scope="prototype" />
+	
+	<bean id="reservation" class="main.model.use.ReservationImpl" scope="prototype" />
+	
+	<bean id="user" class="main.model.use.UserImpl" scope="prototype" />
+	
+	<!-- DEFAULT TESTING OBJECTS -->
+	
+	<bean id="defaultMaintTicket" class="main.model.maintenance.MaintTicketImpl">
+		<property name="description" value="replace lightbulb" />
+		<property name="requestTime" value="2016-03-01T07:00:00" />
+	</bean>
+	
 	<bean id="MaterialA" class="main.model.maintenance.MaterialImpl" name="brick">
 		<property name="name" value="brick" />
 		<property name="cost" value="2.00" />
 	</bean>
 	
-	<bean id="MaterialB" class="main.model.maintenance.MaterialImpl" name="bulb">
-		<property name="name" value="bulb" />
+	<bean id="MaterialB" class="main.model.maintenance.MaterialImpl" name="lightbulb">
+		<property name="name" value="lightbulb" />
 		<property name="cost" value="5.00" />
 	</bean>
-	-->
-	
-	<bean id="worker" class="main.model.maintenance.WorkerImpl" scope="prototype" />
 	
 	<bean id="WorkerA" class="main.model.maintenance.WorkerImpl" name="Bill">
 		<property name="name" value="Bill" />
@@ -85,6 +84,23 @@
 	<bean id="WorkerB" class="main.model.maintenance.WorkerImpl" name="Bob">
 		<property name="name" value="Bob" />
 		<property name="wage" value="20" />
+	</bean>
+	
+	<bean id="defaultInspection" class="main.model.use.InspectionImpl">
+		<property name="description" value="water" />
+		<property name="date" value="2016-03-01T08:00:00" />
+	</bean>
+	
+	<bean id="UserA" class="main.model.use.UserImpl" name="Anna">
+		<property name="name" value="Anna" />
+	</bean>
+	
+	<bean id="defaultReservation" class="main.model.use.ReservationImpl">
+		<property name="user">
+			<ref bean="UserA" />
+		</property>
+		<property name="startTime" value="2016-03-01T07:00:00" />
+		<property name="endTime" value="2016-03-01T09:00:00" />
 	</bean>
 		
 		

@@ -2,98 +2,104 @@ package test.model.use;
 
 import static org.junit.Assert.*;
 
-import java.util.List;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import main.model.use.Inspection;
+import main.model.use.Reservation;
 import main.model.use.UsageService;
-import main.model.use.User;
 
 public class UsageServiceTest {
 	
-	final LocalDateTime defaultSinceTime = LocalDateTime.of(2016, 3, 1, 6, 0, 0, 0);
-	final LocalDateTime defaultStartTime = LocalDateTime.of(2016, 3, 1, 7, 0, 0, 0);
-	final LocalDateTime defaultEndTime = LocalDateTime.of(2016, 3, 1, 9, 0, 0, 0);
-	final LocalDateTime defaultTilTime = LocalDateTime.of(2016, 3, 1, 11, 0, 0, 0);
-	final UsageService defaultUsageService = new UsageService();
-	final User defaultUser = new User("Annie");
-	final Inspection defaultInspection = new Inspection("Water Inspection", LocalDateTime.of(2015, 3, 1, 7, 0, 0, 0));
+	final ApplicationContext context = new ClassPathXmlApplicationContext("FacilitiesContext.xml");
+	final LocalDateTime since = LocalDateTime.parse("2016-03-01T06:00:00");
+	final LocalDateTime start = LocalDateTime.parse("2016-03-01T07:00:00");
+	final LocalDateTime end = LocalDateTime.parse("2016-03-01T09:00:00");
+	final LocalDateTime til = LocalDateTime.parse("2016-03-01T11:00:00");
+	
+	private UsageService use;
+	private Reservation r;
+	private Inspection i;
 	
 	@Before
 	public void setUp() throws Exception {
+		use = (UsageService) context.getBean("usageService");
+		r = (Reservation) context.getBean("defaultReservation");
+		i = (Inspection) context.getBean("defaultInspection");
 	}
 
 	@After
 	public void tearDown() throws Exception {
+		use = null;
+		r = null;
+		i = null;
 	}
 
 	@Test
 	public void testIsInUseDuringInterval() {
-		UsageService use = defaultUsageService;
-		assertFalse(use.isInUseDuringInterval(defaultStartTime, defaultEndTime)); //7-9
-		use.assignFacilityToUse(defaultStartTime, defaultEndTime, defaultUser);
-		assertTrue(use.isInUseDuringInterval(defaultStartTime, defaultEndTime)); //7-9
-		assertFalse(use.isInUseDuringInterval(defaultStartTime.minusHours(1), defaultStartTime)); //6-7
-		assertFalse(use.isInUseDuringInterval(defaultEndTime, defaultEndTime.plusHours(1))); //9-10
-		assertTrue(use.isInUseDuringInterval(defaultStartTime.minusHours(1), defaultEndTime.minusHours(1))); //6-8
-		assertTrue(use.isInUseDuringInterval(defaultStartTime.plusHours(1), defaultEndTime.plusHours(1))); //8-10
-		assertTrue(use.isInUseDuringInterval(defaultStartTime.plusMinutes(30), defaultEndTime.minusMinutes(30))); //7:30-8:30
+		assertFalse(use.isInUseDuringInterval(start, end)); //7-9
+		use.assignFacilityToUse(r);
+		assertTrue(use.isInUseDuringInterval(start, end)); //7-9
+		assertFalse(use.isInUseDuringInterval(start.minusHours(1), start)); //6-7
+		assertFalse(use.isInUseDuringInterval(end, end.plusHours(1))); //9-10
+		assertTrue(use.isInUseDuringInterval(start.minusHours(1), end.minusHours(1))); //6-8
+		assertTrue(use.isInUseDuringInterval(start.plusHours(1), end.plusHours(1))); //8-10
+		assertTrue(use.isInUseDuringInterval(start.plusMinutes(30), end.minusMinutes(30))); //7:30-8:30
 	}
 
 	@Test
 	public void testAssignFacilityToUse() {
-		UsageService use = defaultUsageService;
-		assertTrue(use.assignFacilityToUse(defaultStartTime, defaultEndTime, defaultUser)); //7-9
-		assertFalse(use.assignFacilityToUse(defaultStartTime, defaultEndTime, defaultUser)); //7-9
-		assertFalse(use.assignFacilityToUse(defaultStartTime.plusHours(1), defaultEndTime.plusHours(1), defaultUser)); //8-10
-		assertFalse(use.isInUseDuringInterval(defaultEndTime, defaultEndTime.plusHours(2))); //9-11
-		assertTrue(use.assignFacilityToUse(defaultStartTime.plusHours(2), defaultEndTime.plusHours(2), defaultUser)); //9-11
+		use.assignFacilityToUse(r); //7-9
+		use.assignFacilityToUse(r); //7-9
+		Reservation s = r;
+		s.setStartTime(r.getStartTime().plusHours(1));
+		s.setEndTime(r.getEndTime().plusHours(1));
+		use.assignFacilityToUse(s); //8-10
+		s.setStartTime(r.getStartTime().plusHours(2));
+		s.setEndTime(r.getEndTime().plusHours(2));
+		use.assignFacilityToUse(s); //9-11
 	}
 
 	@Test
 	public void testVacateFacility() {
-		UsageService use = defaultUsageService;
-		use.assignFacilityToUse(defaultStartTime, defaultEndTime, defaultUser);
-		assertTrue(use.isInUseDuringInterval(defaultStartTime, defaultEndTime));
-		use.vacateFacility(defaultStartTime.minusHours(1), defaultEndTime.minusHours(1));
-		assertFalse(use.isInUseDuringInterval(defaultStartTime, defaultEndTime));
+		use.assignFacilityToUse(r);
+		assertTrue(use.isInUseDuringInterval(start, end));
+		use.vacateFacility(start.minusHours(1), end.minusHours(1));
+		assertFalse(use.isInUseDuringInterval(start, end));
 	}
 
 	@Test
 	public void testListAndAddInspections() {
-		UsageService use = defaultUsageService;
-		Inspection i = defaultInspection;
-		Inspection j = new Inspection(i.getDescription(), i.getDate().minusYears(1));
-		Inspection k = new Inspection(j.getDescription(), j.getDate().minusYears(1));
-		List<Inspection> ins = new ArrayList<Inspection>();
-		ins.add(i);
-		use.addInspections(ins);
-		assertEquals(use.listInspections(), ins);
-		ins.add(j);
-		ins.add(k);
-		use.addInspections(ins);
-		assertEquals(use.listInspections(), ins);
+		Inspection j = (Inspection) context.getBean("inspection");
+		j.setDescription(i.getDescription());
+		j.setDate(i.getDate().minusYears(1));
+		Inspection k = (Inspection) context.getBean("inspection");
+		k.setDescription(j.getDescription());
+		k.setDate(j.getDate().minusYears(1));
+		use.addInspection(i);
+		assertTrue(use.listInspections().contains(i));
+		use.addInspection(j);
+		use.addInspection(k);
+		assertTrue(use.listInspections().contains(j));
 	}
 
 	@Test
 	public void testListActualUsage() {
-		UsageService use = defaultUsageService;
 		assertTrue(use.listActualUsage().isEmpty());
-		use.assignFacilityToUse(defaultStartTime, defaultEndTime, defaultUser);
+		use.assignFacilityToUse(r);
 		assertFalse(use.listActualUsage().isEmpty());
 	}
 
 	@Test
 	public void testCalcUsageRate() {
-		UsageService use = defaultUsageService;
-		assertEquals(use.calcUsageRate(defaultSinceTime, defaultTilTime), 0, 0);
-		use.assignFacilityToUse(defaultStartTime, defaultEndTime, defaultUser);
-		assertEquals(use.calcUsageRate(defaultSinceTime, defaultTilTime), .4, 0.01);
+		assertEquals(use.calcUsageRate(since, til), 0, 0);
+		use.assignFacilityToUse(r);
+		assertEquals(use.calcUsageRate(since, til), .4, 0.01);
 	}
 
 }

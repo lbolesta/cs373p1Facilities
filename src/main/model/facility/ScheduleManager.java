@@ -3,26 +3,26 @@ package main.model.facility;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import main.model.maintenance.MaintenanceService;
-import main.model.maintenance.MaintenanceServiceImpl;
+import main.model.maintenance.MaintService;
+import main.model.maintenance.MaintServiceImpl;
 import main.model.maintenance.MaintTicket;
-import main.model.use.IFacilityUse;
+import main.model.use.UsageService;
 import main.model.use.Inspection;
 import main.model.use.Reservation;
 import main.model.use.UsageService;
 import main.model.use.User;
 
-public class ScheduleManager implements MaintenanceService<MaintTicket>, IFacilityUse<Reservation, Inspection> {
-	private MaintenanceService<MaintTicket> maint;
+public class ScheduleManager implements MaintService<MaintTicket>, UsageService<Reservation, Inspection> {
+	private MaintService<MaintTicket> maint;
 	private UsageService usage;
 	private static User maintUser = new User("Maintenance");
 	
 	public ScheduleManager(){
-		maint = new MaintenanceServiceImpl();
+		maint = new MaintServiceImpl();
 		usage = new UsageService();
 	}
 	
-	public MaintenanceService<MaintTicket> getMaint() {
+	public MaintService<MaintTicket> getMaint() {
 		return maint;
 	}
 	

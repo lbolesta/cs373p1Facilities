@@ -5,11 +5,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MaintenanceServiceImpl implements MaintenanceService<MaintTicket> {
+public class MaintServiceImpl implements MaintService {
 
 	private List<MaintTicket> tickets;
 	
-	public MaintenanceServiceImpl() {
+	public MaintServiceImpl() {
 		tickets = new ArrayList<MaintTicket>();
 	}
 	
