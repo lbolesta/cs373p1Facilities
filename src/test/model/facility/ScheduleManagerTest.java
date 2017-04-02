@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import main.model.facility.Room;
 import main.model.facility.ScheduleManager;
@@ -17,13 +19,15 @@ import test.model.use.*;
 
 public class ScheduleManagerTest {
 	
+	final ApplicationContext context = new ClassPathXmlApplicationContext("FacilitiesContext.xml");
+	
 	final Room defaultRoom = new Room("711", 40);
 	final ScheduleManager defaultSchedule = defaultRoom.getScheduleManager();
 	final MaintenanceServiceTest maintTest = new MaintenanceServiceTest();
 	final UsageServiceTest useTest = new UsageServiceTest();
 	final LocalDateTime defaultStartTime = LocalDateTime.of(2016, 3, 1, 7, 0, 0, 0);
 	final LocalDateTime defaultEndTime = LocalDateTime.of(2016, 3, 1, 9, 0, 0, 0);
-	final User defaultUser = new User("Anna");
+	final User defaultUser = (User) context.getBean("UserA");
 
 	@Before
 	public void setUp() throws Exception {
@@ -50,7 +54,7 @@ public class ScheduleManagerTest {
 
 	@Test
 	public void testScheduleMaintenance() {
-		assertTrue(defaultSchedule.assignFacilityToUse(defaultStartTime, defaultEndTime, defaultUser)); //7-9
+		defaultSchedule.assignFacilityToUse(defaultStartTime, defaultEndTime, defaultUser); //7-9
 		assertFalse(defaultSchedule.listActualUsage().isEmpty());
 		assertEquals(defaultSchedule.listActualUsage().size(), 1);
 		defaultSchedule.makeFacilityMaintRequest("replace lightbulb", defaultStartTime);

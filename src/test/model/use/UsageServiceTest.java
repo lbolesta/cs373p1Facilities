@@ -43,7 +43,7 @@ public class UsageServiceTest {
 	@Test
 	public void testIsInUseDuringInterval() {
 		assertFalse(use.isInUseDuringInterval(start, end)); //7-9
-		use.assignFacilityToUse(r);
+		use.assignFacilityToUse(r.getStartTime(), r.getEndTime(), r.getUser());
 		assertTrue(use.isInUseDuringInterval(start, end)); //7-9
 		assertFalse(use.isInUseDuringInterval(start.minusHours(1), start)); //6-7
 		assertFalse(use.isInUseDuringInterval(end, end.plusHours(1))); //9-10
@@ -54,20 +54,20 @@ public class UsageServiceTest {
 
 	@Test
 	public void testAssignFacilityToUse() {
-		use.assignFacilityToUse(r); //7-9
-		use.assignFacilityToUse(r); //7-9
+		use.assignFacilityToUse(r.getStartTime(), r.getEndTime(), r.getUser()); //7-9
+		use.assignFacilityToUse(r.getStartTime(), r.getEndTime(), r.getUser()); //7-9
 		Reservation s = r;
 		s.setStartTime(r.getStartTime().plusHours(1));
 		s.setEndTime(r.getEndTime().plusHours(1));
-		use.assignFacilityToUse(s); //8-10
+		use.assignFacilityToUse(s.getStartTime(), s.getEndTime(), s.getUser()); //8-10
 		s.setStartTime(r.getStartTime().plusHours(2));
 		s.setEndTime(r.getEndTime().plusHours(2));
-		use.assignFacilityToUse(s); //9-11
+		use.assignFacilityToUse(s.getStartTime(), s.getEndTime(), s.getUser()); //9-11
 	}
 
 	@Test
 	public void testVacateFacility() {
-		use.assignFacilityToUse(r);
+		use.assignFacilityToUse(r.getStartTime(), r.getEndTime(), r.getUser());
 		assertTrue(use.isInUseDuringInterval(start, end));
 		use.vacateFacility(start.minusHours(1), end.minusHours(1));
 		assertFalse(use.isInUseDuringInterval(start, end));
@@ -81,24 +81,24 @@ public class UsageServiceTest {
 		Inspection k = (Inspection) context.getBean("inspection");
 		k.setDescription(j.getDescription());
 		k.setDate(j.getDate().minusYears(1));
-		use.addInspection(i);
+		use.addInspection(i.getDate(), i.getDescription());
 		assertTrue(use.listInspections().contains(i));
-		use.addInspection(j);
-		use.addInspection(k);
+		use.addInspection(j.getDate(), j.getDescription());
+		use.addInspection(k.getDate(), k.getDescription());
 		assertTrue(use.listInspections().contains(j));
 	}
 
 	@Test
 	public void testListActualUsage() {
 		assertTrue(use.listActualUsage().isEmpty());
-		use.assignFacilityToUse(r);
+		use.assignFacilityToUse(r.getStartTime(), r.getEndTime(), r.getUser());
 		assertFalse(use.listActualUsage().isEmpty());
 	}
 
 	@Test
 	public void testCalcUsageRate() {
 		assertEquals(use.calcUsageRate(since, til), 0, 0);
-		use.assignFacilityToUse(r);
+		use.assignFacilityToUse(r.getStartTime(), r.getEndTime(), r.getUser());
 		assertEquals(use.calcUsageRate(since, til), .4, 0.01);
 	}
 

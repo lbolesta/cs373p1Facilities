@@ -1,10 +1,10 @@
 package main.model.use;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class InspectionImpl implements Inspection {
 	
-	private LocalDateTime date;
+	private LocalDate date;
 	private String description;
 	
 	/*public String toString(){
@@ -14,11 +14,11 @@ public class InspectionImpl implements Inspection {
 		return str;
 	}*/
 	
-	public LocalDateTime getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 	
-	public void setDate(LocalDateTime date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 

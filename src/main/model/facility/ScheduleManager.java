@@ -1,7 +1,11 @@
 package main.model.facility;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import main.model.maintenance.MaintService;
 import main.model.maintenance.MaintServiceImpl;
@@ -12,17 +16,20 @@ import main.model.use.Reservation;
 import main.model.use.UsageService;
 import main.model.use.User;
 
-public class ScheduleManager implements MaintService<MaintTicket>, UsageService<Reservation, Inspection> {
-	private MaintService<MaintTicket> maint;
-	private UsageService usage;
-	private static User maintUser = new User("Maintenance");
+public class ScheduleManager implements MaintService, UsageService {
 	
-	public ScheduleManager(){
+	ApplicationContext context = new ClassPathXmlApplicationContext("FacilitiesContext.xml");
+	
+	private MaintService maint = (MaintService) context.getBean("maintService");
+	private UsageService usage = (UsageService) context.getBean("usageService");
+	private User maintUser = (User) context.getBean("user");
+	
+	/*public ScheduleManager(){
 		maint = new MaintServiceImpl();
 		usage = new UsageService();
-	}
+	}*/
 	
-	public MaintService<MaintTicket> getMaint() {
+	public MaintService getMaint() {
 		return maint;
 	}
 	
@@ -76,8 +83,8 @@ public class ScheduleManager implements MaintService<MaintTicket>, UsageService<
 		return usage.isInUseDuringInterval(startTime, endTime);
 	}
 	@Override
-	public boolean assignFacilityToUse(LocalDateTime startTime, LocalDateTime endTime, User user) {
-		return usage.assignFacilityToUse(startTime, endTime, user);
+	public void assignFacilityToUse(LocalDateTime startTime, LocalDateTime endTime, User user) {
+		usage.assignFacilityToUse(startTime, endTime, user);
 	}
 	@Override
 	public void vacateFacility(LocalDateTime startTime, LocalDateTime endTime) {
@@ -110,14 +117,16 @@ public class ScheduleManager implements MaintService<MaintTicket>, UsageService<
 		}
 		return false;
 	}
-	
-	public void addInspections(List<Inspection> inspections) {
-		usage.addInspections(inspections);
-	}
 
 	@Override
 	public MaintTicket getMaintTicket(String description) {
 		return maint.getMaintTicket(description);
+	}
+
+	@Override
+	public void addInspection(LocalDate date, String description) {
+		usage.addInspection(date, description);
+		
 	}
 	
 	

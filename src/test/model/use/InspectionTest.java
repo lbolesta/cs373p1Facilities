@@ -8,13 +8,13 @@ import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import main.model.use.Inspection;
 
 public class InspectionTest {
 	
 	final ApplicationContext context = new ClassPathXmlApplicationContext("FacilitiesContext.xml");
-	final LocalDateTime defaultDate = LocalDateTime.parse("2016-03-01T09:00:00");
+	final LocalDate defaultDate = LocalDate.parse("2016-03-01");
 	private Inspection i;
 
 	@Before

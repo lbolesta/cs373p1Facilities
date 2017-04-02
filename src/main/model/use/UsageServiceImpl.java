@@ -1,11 +1,17 @@
 package main.model.use;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 public class UsageServiceImpl implements UsageService {
+	
+	ApplicationContext context = new ClassPathXmlApplicationContext("FacilitiesContext.xml");
 	
 	private List<Reservation> reservations;
 	private List<Inspection> inspections;
@@ -30,9 +36,14 @@ public class UsageServiceImpl implements UsageService {
 		return false;
 	}
 
-	public void assignFacilityToUse(Reservation r) {
-		boolean inUse = isInUseDuringInterval(r.getStartTime(), r.getEndTime());
+	public void assignFacilityToUse(LocalDateTime start, LocalDateTime end, User user) {
+		boolean inUse = isInUseDuringInterval(start, end);
+		
 		if(!inUse){
+			Reservation r = (Reservation) context.getBean("reservation");
+			r.setStartTime(start);
+			r.setEndTime(end);
+			r.setUser(user);
 			this.addReservation(r);
 		}
 	}
@@ -91,7 +102,8 @@ public class UsageServiceImpl implements UsageService {
 		}
 	}
 
-	public void addInspection(Inspection i) {
+	public void addInspection(LocalDate date, String description) {
+		Inspection i = (Inspection) context.getBean("inspection");
 		if (!this.inspections.contains(i)){
 			this.inspections.add(i);
 		}

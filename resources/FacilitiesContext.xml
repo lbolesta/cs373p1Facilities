@@ -9,6 +9,7 @@
 	   <property name="customEditors">
 	      <map>
 	         <entry key="java.time.LocalDateTime" value="main.model.CustomLocalDateTimeEditor" />
+	         <entry key="java.time.LocalDate" value="main.model.CustomLocalDateEditor" />
 	      </map>
 	   </property>
 	</bean>
@@ -88,7 +89,7 @@
 	
 	<bean id="defaultInspection" class="main.model.use.InspectionImpl">
 		<property name="description" value="water" />
-		<property name="date" value="2016-03-01T08:00:00" />
+		<property name="date" value="2016-02-01" />
 	</bean>
 	
 	<bean id="UserA" class="main.model.use.UserImpl" name="Anna">

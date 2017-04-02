@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface MaintService {
 	public void makeFacilityMaintRequest(String description, LocalDateTime start);
-	public void scheduleMaintenance(MaintTicket ticket, LocalDateTime startTime, LocalDateTime endTime);
+	public void scheduleMaintenance(MaintTicket ticket, LocalDateTime start, LocalDateTime end);
 	public float calcMaintenanceCostForFacility();
 	public float calcProblemRateForFacility(LocalDateTime since, LocalDateTime til);
 	public float calcDownTimeForFacility(LocalDateTime since, LocalDateTime til);

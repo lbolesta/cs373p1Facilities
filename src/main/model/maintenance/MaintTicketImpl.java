@@ -12,15 +12,15 @@ public class MaintTicketImpl implements MaintTicket {
 	private List<Material> materials = new ArrayList<Material>();
 	private Set<Worker> workers = new HashSet<Worker>();
 	
-	private LocalDateTime requestTime;
-	private LocalDateTime orderTime;
-	private LocalDateTime resolveTime;
+	private LocalDateTime requestedAt;
+	private LocalDateTime orderedAt;
+	private LocalDateTime resolvedAt;
 	
 	
 	private LocalDateTime validateTime(LocalDateTime time, int pos) throws Exception {
-		LocalDateTime request = requestTime;
-		LocalDateTime order = orderTime;
-		LocalDateTime resolve = resolveTime;
+		LocalDateTime request = requestedAt;
+		LocalDateTime order = orderedAt;
+		LocalDateTime resolve = resolvedAt;
 		switch (pos) {
 			case 0: request = time;
 					break;
@@ -62,21 +62,23 @@ public class MaintTicketImpl implements MaintTicket {
 		return str;
 	}*/
 	
+	@Override
 	public String getState(LocalDateTime atTime) {
 		String state = "";
-		if (orderTime == null) {
+		if (orderedAt == null) {
 			state = "REQUEST";
-		} else if (orderTime != null && isInOrder(atTime, resolveTime)){
+		} else if (orderedAt != null && isInOrder(atTime, resolvedAt)){
 			state = "ORDER";
-		} else if (isInOrder(resolveTime, atTime)){
+		} else if (isInOrder(resolvedAt, atTime)){
 			state = "RESOLVED";
 		}
 		return state;
 	}
 	
+	@Override
 	public double calcCost() {
 		double cost = 0;
-		float hours = (Duration.between(orderTime, resolveTime)).toHours();
+		float hours = (Duration.between(orderedAt, resolvedAt)).toHours();
 		
 		for (Material material : materials) {
 			cost += material.getCost();
@@ -98,12 +100,12 @@ public class MaintTicketImpl implements MaintTicket {
 	
 
 	public LocalDateTime getRequestTime() {
-		return requestTime;
+		return requestedAt;
 	}
 
 	public void setRequestTime(LocalDateTime requestTime){
 		try {
-			this.requestTime = validateTime(requestTime, 0);
+			this.requestedAt = validateTime(requestTime, 0);
 		}
 		catch (Exception e) {
 			System.out.println(e);
@@ -111,24 +113,24 @@ public class MaintTicketImpl implements MaintTicket {
 	}
 
 	public LocalDateTime getOrderTime() {
-		return orderTime;
+		return orderedAt;
 	}
 
 	public void setOrderTime(LocalDateTime orderTime) {
 		try {
-			this.orderTime = validateTime(orderTime, 1);
+			this.orderedAt = validateTime(orderTime, 1);
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 	}
 
 	public LocalDateTime getResolveTime() {
-		return resolveTime;
+		return resolvedAt;
 	}
 
 	public void setResolveTime(LocalDateTime resolveTime) {
 		try {
-			this.resolveTime = validateTime(resolveTime, 2);
+			this.resolvedAt = validateTime(resolveTime, 2);
 		}
 		catch (Exception e) {
 			System.out.println(e);

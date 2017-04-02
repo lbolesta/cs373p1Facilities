@@ -88,7 +88,7 @@ public class FacilityMain {
 		
 		final LocalDateTime defaultStartTime = LocalDateTime.of(2016, 3, 1, 7, 0, 0, 0);
 		final LocalDateTime defaultEndTime = LocalDateTime.of(2016, 3, 1, 10, 0, 0, 0);
-		final User defaultUser = new User("Anna");
+		final User defaultUser = (User) context.getBean("UserA");
 		
 		Room room = defaultCampus.getFacility("Corboy Law Center").getFacility("711");
 		ScheduleManager schedule = room.getScheduleManager();
@@ -128,11 +128,9 @@ public class FacilityMain {
 		System.out.println();
 		System.out.println("Adding inspection...");
 
-		final Inspection defaultInspection = new Inspection("Water Inspection", LocalDateTime.of(2015, 3, 1, 7, 0, 0, 0));
-		final List<Inspection> inspections = new ArrayList<Inspection>();
-		inspections.add(defaultInspection);
+		final Inspection defaultInspection = (Inspection) context.getBean("defaultInspection");
 		
-		schedule.addInspections(inspections);
+		schedule.addInspection(defaultInspection.getDate(), defaultInspection.getDescription());
 		
 		for (Inspection i : schedule.listInspections()){
 			System.out.println(i.toString());

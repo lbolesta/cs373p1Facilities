@@ -24,7 +24,7 @@ public class MaintServiceImpl implements MaintService {
 	@Override
 	public MaintTicket getMaintTicket(String description) {
 		for (MaintTicket t : tickets) {
-			if (t.getState(LocalDateTime.now()) == "REQUEST" && t.getDescription() == description) {
+			if (t.getDescription() == description) {
 				return t;
 			}
 		}
