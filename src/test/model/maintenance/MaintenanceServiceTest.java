@@ -11,7 +11,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import main.model.maintenance.MaintTicket;
-import main.model.maintenance.MaintenanceService;
+import main.model.maintenance.MaintenanceServiceImpl;
 import main.model.maintenance.Material;
 import main.model.maintenance.Worker;
 
@@ -19,22 +19,30 @@ public class MaintenanceServiceTest {
 	
 	final ApplicationContext context = new ClassPathXmlApplicationContext("FacilitiesContext.xml");
 	
-	final MaintenanceService defaultMaintenanceService = new MaintenanceService();
+	final MaintenanceServiceImpl defaultMaintenanceService = new MaintenanceServiceImpl();
 	final LocalDateTime defaultSinceTime = LocalDateTime.parse("2016-03-01T06:00:00");
 	final LocalDateTime defaultRequestTime = LocalDateTime.parse("2016-03-01T07:00:00");
 	final LocalDateTime defaultOrderTime = LocalDateTime.parse("2016-03-01T08:00:00");
 	final LocalDateTime defaultResolveTime = LocalDateTime.parse("2016-03-01T10:00:00");
 	final LocalDateTime defaultTilTime = LocalDateTime.parse("2016-03-01T12:00:00");
-	final Material brick = (Material) context.getBean("brick");
-	final Material bulb = (Material) context.getBean("bulb");
-	final Worker Bill = (Worker) context.getBean("Bill");
-	final Worker Bob = (Worker) context.getBean("Bob");
+	final Material brick = (Material) context.getBean("material");
+	final Material lightbulb = (Material) context.getBean("material");
+	final Worker Bill = (Worker) context.getBean("worker");
+	final Worker Bob = (Worker) context.getBean("worker");
 	
-	private MaintenanceService maint;
+	private MaintenanceServiceImpl maint;
 
 	@Before
 	public void setUp() throws Exception {
 		maint = defaultMaintenanceService;
+		brick.setName("brick");
+		brick.setCost(2);
+		lightbulb.setName("lightbulb");
+		lightbulb.setCost(5);
+		Bill.setName("Bill");
+		Bill.setWage(10);
+		Bob.setName("Bob");
+		Bob.setWage(20);
 	}
 
 	@After
@@ -75,7 +83,7 @@ public class MaintenanceServiceTest {
 		ticket.addWorker(Bob);
 		ticket.addMaterial(brick);
 		ticket.addMaterial(brick);
-		ticket.addMaterial(bulb);
+		ticket.addMaterial(lightbulb);
 		assertEquals(maint.calcMaintenanceCostForFacility(), 69, 0);
 	}
 

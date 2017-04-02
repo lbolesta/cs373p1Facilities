@@ -3,26 +3,26 @@ package main.model.facility;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import main.model.maintenance.IFacilityMaintenance;
-import main.model.maintenance.MaintTicket;
 import main.model.maintenance.MaintenanceService;
+import main.model.maintenance.MaintenanceServiceImpl;
+import main.model.maintenance.MaintTicket;
 import main.model.use.IFacilityUse;
 import main.model.use.Inspection;
 import main.model.use.Reservation;
 import main.model.use.UsageService;
 import main.model.use.User;
 
-public class ScheduleManager implements IFacilityMaintenance<MaintTicket>, IFacilityUse<Reservation, Inspection> {
-	private MaintenanceService maint;
+public class ScheduleManager implements MaintenanceService<MaintTicket>, IFacilityUse<Reservation, Inspection> {
+	private MaintenanceService<MaintTicket> maint;
 	private UsageService usage;
 	private static User maintUser = new User("Maintenance");
 	
 	public ScheduleManager(){
-		maint = new MaintenanceService();
+		maint = new MaintenanceServiceImpl();
 		usage = new UsageService();
 	}
 	
-	public MaintenanceService getMaint() {
+	public MaintenanceService<MaintTicket> getMaint() {
 		return maint;
 	}
 	
@@ -61,11 +61,11 @@ public class ScheduleManager implements IFacilityMaintenance<MaintTicket>, IFaci
 	}
 	@Override
 	public List<MaintTicket> listMaintRequests() {
-		return maint.listMaintRequests();
+		return (List<MaintTicket>) maint.listMaintRequests();
 	}
 	@Override
 	public List<MaintTicket> listMaintenance() {
-		return maint.listMaintenance();
+		return (List<MaintTicket>) maint.listMaintenance();
 	}
 	@Override
 	public List<String> listFacilityProblems() {
@@ -113,6 +113,11 @@ public class ScheduleManager implements IFacilityMaintenance<MaintTicket>, IFaci
 	
 	public void addInspections(List<Inspection> inspections) {
 		usage.addInspections(inspections);
+	}
+
+	@Override
+	public MaintTicket getMaintTicket(String description) {
+		return maint.getMaintTicket(description);
 	}
 	
 	

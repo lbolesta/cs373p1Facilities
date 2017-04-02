@@ -22,16 +22,24 @@ public class MaintTicketTest {
 	final LocalDateTime defaultRequestTime = LocalDateTime.parse("2016-03-01T07:00:00");
 	final LocalDateTime defaultOrderTime = LocalDateTime.parse("2016-03-01T08:00:00");
 	final LocalDateTime defaultResolveTime = LocalDateTime.parse("2016-03-01T10:00:00");
-	final Material brick = (Material) context.getBean("brick");
-	final Material bulb = (Material) context.getBean("bulb");
-	final Worker Bill = (Worker) context.getBean("Bill");
-	final Worker Bob = (Worker) context.getBean("Bob");
+	final Material brick = (Material) context.getBean("material");
+	final Material lightbulb = (Material) context.getBean("material");
+	final Worker Bill = (Worker) context.getBean("worker");
+	final Worker Bob = (Worker) context.getBean("worker");
 	
 	private MaintTicket ticket;
 
 	@Before
 	public void setUp() throws Exception {
 		ticket = defaultTicket;
+		brick.setName("brick");
+		brick.setCost(2);
+		lightbulb.setName("lightbulb");
+		lightbulb.setCost(5);
+		Bill.setName("Bill");
+		Bill.setWage(10);
+		Bob.setName("Bob");
+		Bob.setWage(20);
 	}
 
 	@After
@@ -104,12 +112,12 @@ public class MaintTicketTest {
 		ticket.setResolveTime(defaultResolveTime);
 		assertTrue(ticket.getMaterials().isEmpty());
 		ticket.addMaterial(brick);
-		ticket.addMaterial(bulb);
-		ticket.addMaterial(bulb);
+		ticket.addMaterial(lightbulb);
+		ticket.addMaterial(lightbulb);
 		assertEquals(ticket.calcCost(), 12, 0);
-		ticket.removeMaterial(bulb);
+		ticket.removeMaterial(lightbulb);
 		assertEquals(ticket.calcCost(), 7, 0);
-		ticket.removeMaterial(bulb);
+		ticket.removeMaterial(lightbulb);
 		assertEquals(ticket.calcCost(), 2, 0);
 	}
 

@@ -1,22 +1,8 @@
 package main.model.maintenance;
 
-public class Worker {
-	private String name;
-	private double wage;
-	
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public double getWage() {
-		return wage;
-	}
-	
-	public void setWage(double wage) {
-		this.wage = wage;
-	}
+public interface Worker {
+	public String getName();
+	public void setName(String name);
+	public double getWage();
+	public void setWage(double wage);
 }

@@ -6,7 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import main.model.maintenance.Worker;
+import main.model.maintenance.WorkerImpl;
 
 public class WorkerTest {
 
@@ -20,7 +20,7 @@ public class WorkerTest {
 
 	@Test
 	public void testGetAndSetName() {
-		final Worker worker = new Worker();
+		final WorkerImpl worker = new WorkerImpl();
 		assertEquals(worker.getName(), null);
 		worker.setName("Bill");
 		assertEquals(worker.getName(),"Bill");
@@ -30,7 +30,7 @@ public class WorkerTest {
 
 	@Test
 	public void testGetAndSetWage() {
-		final Worker worker = new Worker();
+		final WorkerImpl worker = new WorkerImpl();
 		assertEquals(worker.getWage(), 0, 0);
 		worker.setWage(8.25);
 		assertEquals(worker.getWage(),8.25,0);

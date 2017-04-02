@@ -6,7 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import main.model.maintenance.Material;
+import main.model.maintenance.MaterialImpl;
 
 public class MaterialTest {
 
@@ -20,7 +20,7 @@ public class MaterialTest {
 
 	@Test
 	public void testGetAndSetName() {
-		final Material material = new Material();
+		final MaterialImpl material = new MaterialImpl();
 		assertNull(material.getName());
 		material.setName("rock");
 		assertEquals(material.getName(),"rock");
@@ -28,7 +28,7 @@ public class MaterialTest {
 
 	@Test
 	public void testGetAndSetCost() {
-		final Material material = new Material();
+		final MaterialImpl material = new MaterialImpl();
 		assertEquals(material.getCost(), 0, 0);
 		material.setCost(0.99);
 		assertEquals(material.getCost(), 0.99, 0);
