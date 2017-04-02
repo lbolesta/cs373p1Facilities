@@ -5,10 +5,18 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		
+	<bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+	   <property name="customEditors">
+	      <map>
+	         <entry key="java.time.LocalDateTime" value="main.model.CustomLocalDateTimeEditor" />
+	      </map>
+	   </property>
+	</bean>
+		
 		
 	<bean id="campus" class="main.model.facility.Campus">
 		<constructor-arg value = "Loyola"></constructor-arg>
-		</bean>
+	</bean>
 		
 	<bean id="defaultRoom" class="main.model.facility.Room">
 		<constructor-arg type="java.lang.String">
@@ -17,7 +25,7 @@
 		<constructor-arg type="int">
 			<value>40</value>
 		</constructor-arg>
-		</bean>
+	</bean>
 		
 	<bean id="defaultRoom2" class="main.model.facility.Room">
 		<constructor-arg type="java.lang.String">
@@ -26,7 +34,7 @@
 		<constructor-arg type="int">
 			<value>50</value>
 		</constructor-arg>
-		</bean>
+	</bean>
 		
 	
 	<bean id="defaultBuilding" class="main.model.facility.Building">
@@ -36,7 +44,8 @@
 	</bean>
 	
 	<bean id="defaultMaintTicket" class="main.model.maintenance.MaintTicket">
-		
+		<property name="description" value="replace lightbulb"/>
+		<property name="requestTime" value="2016-03-01T07:00:00" />
 	</bean>
 	
 	<bean id="MaterialA" class="main.model.maintenance.Material" name="brick">

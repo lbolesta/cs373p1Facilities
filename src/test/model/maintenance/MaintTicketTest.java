@@ -18,26 +18,29 @@ public class MaintTicketTest {
 	
 	final ApplicationContext context = new ClassPathXmlApplicationContext("FacilitiesContext.xml");
 	
-	final LocalDateTime defaultRequestTime = LocalDateTime.of(2016, 3, 1, 7, 0, 0, 0);
-	final MaintTicket defaultTicket = new MaintTicket("replace lightbulb",defaultRequestTime);
-	final LocalDateTime defaultOrderTime = LocalDateTime.of(2016, 3, 1, 8, 0, 0, 0);
-	final LocalDateTime defaultResolveTime = LocalDateTime.of(2016, 3, 1, 10, 0, 0, 0);
+	final MaintTicket defaultTicket = (MaintTicket) context.getBean("defaultMaintTicket");
+	final LocalDateTime defaultRequestTime = LocalDateTime.parse("2016-03-01T07:00:00");
+	final LocalDateTime defaultOrderTime = LocalDateTime.parse("2016-03-01T08:00:00");
+	final LocalDateTime defaultResolveTime = LocalDateTime.parse("2016-03-01T10:00:00");
 	final Material brick = (Material) context.getBean("brick");
 	final Material bulb = (Material) context.getBean("bulb");
 	final Worker Bill = (Worker) context.getBean("Bill");
 	final Worker Bob = (Worker) context.getBean("Bob");
+	
+	private MaintTicket ticket;
 
 	@Before
 	public void setUp() throws Exception {
+		ticket = defaultTicket;
 	}
 
 	@After
 	public void tearDown() throws Exception {
+		ticket = null;
 	}
 
 	@Test
-	public void testGetState() {
-		MaintTicket ticket = defaultTicket;
+	public void testGetState() throws Exception {
 		LocalDateTime time = LocalDateTime.of(2016, 3, 1, 7, 30, 0, 0);
 		assertEquals(ticket.getState(time), "REQUEST");
 		ticket.setOrderTime(defaultOrderTime);
@@ -49,8 +52,7 @@ public class MaintTicketTest {
 	}
 
 	@Test
-	public void testCalcCost() {
-		MaintTicket ticket = defaultTicket;
+	public void testCalcCost() throws Exception {
 		ticket.setOrderTime(defaultOrderTime);
 		ticket.setResolveTime(defaultResolveTime);
 		assertEquals(ticket.calcCost(), 0.0, 0);
@@ -63,7 +65,6 @@ public class MaintTicketTest {
 
 	@Test
 	public void testGetAndSetDescription(){
-		MaintTicket ticket = defaultTicket;
 		final String description = "repaint walls";
 		assertNotEquals(ticket.getDescription(), description);
 		assertEquals(ticket.getDescription(), "replace lightbulb");
@@ -73,35 +74,32 @@ public class MaintTicketTest {
 
 	@Test
 	public void testGetAndSetRequestTime() {
-		MaintTicket ticket = defaultTicket;
-		assertEquals(ticket.getRequestTime(),defaultRequestTime);
-		assertTrue(ticket.setRequestTime(defaultRequestTime.plusHours(1)));
-		assertEquals(ticket.getRequestTime(),defaultRequestTime.plusHours(1));
+		assertEquals(ticket.getRequestTime(), defaultRequestTime);
+		ticket.setRequestTime(defaultRequestTime.plusHours(1));
+		assertEquals(ticket.getRequestTime(), defaultRequestTime.plusHours(1));
 	}
 
 	@Test
-	public void testGetAndSetOrderTime(){
-		MaintTicket ticket = defaultTicket;
-		assertFalse(ticket.setOrderTime(defaultOrderTime.minusHours(2))); //try to set to time less than request
-		assertTrue(ticket.setOrderTime(defaultOrderTime));
+	public void testGetAndSetOrderTime() {
+		ticket.setOrderTime(defaultOrderTime.minusHours(2)); //try to set to time less than request
+		ticket.setOrderTime(defaultOrderTime);
 		assertEquals(ticket.getOrderTime(),defaultOrderTime);
 	}
 
 	@Test
 	public void testGetAndSetResolveTime() {
-		MaintTicket ticket = defaultTicket;
-		assertFalse(ticket.setResolveTime(defaultResolveTime)); //try to set resolve time without order time
-		assertTrue(ticket.setOrderTime(defaultOrderTime));
-		assertTrue(ticket.setResolveTime(defaultResolveTime));
-		assertEquals(ticket.getResolveTime(), defaultResolveTime);
-		assertFalse(ticket.setResolveTime(defaultResolveTime.minusHours(3))); //try to set to time less than order
-		assertTrue(ticket.setResolveTime(defaultResolveTime.minusHours(1)));
+		ticket.setResolveTime(defaultResolveTime); //try to set resolve time without order time
+		ticket.setOrderTime(defaultOrderTime);
+		ticket.setResolveTime(defaultResolveTime);
+		assertEquals(ticket.getResolveTime(), defaultResolveTime);	
+		ticket.setResolveTime(defaultResolveTime.minusHours(3)); // try to set resolve time too early
+		assertEquals(ticket.getResolveTime(),defaultResolveTime);
+		ticket.setResolveTime(defaultResolveTime.minusHours(1));
 		assertEquals(ticket.getResolveTime(),defaultResolveTime.minusHours(1));
 	}
 
 	@Test
 	public void testMaterials() {
-		MaintTicket ticket = defaultTicket;
 		ticket.setOrderTime(defaultOrderTime);
 		ticket.setResolveTime(defaultResolveTime);
 		assertTrue(ticket.getMaterials().isEmpty());
@@ -117,7 +115,6 @@ public class MaintTicketTest {
 
 	@Test
 	public void testWorkers() {
-		MaintTicket ticket = defaultTicket;
 		ticket.setOrderTime(defaultOrderTime);
 		ticket.setResolveTime(defaultResolveTime);
 		assertTrue(ticket.getWorkers().isEmpty());

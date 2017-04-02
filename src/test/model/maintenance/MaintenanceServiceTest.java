@@ -20,11 +20,11 @@ public class MaintenanceServiceTest {
 	final ApplicationContext context = new ClassPathXmlApplicationContext("FacilitiesContext.xml");
 	
 	final MaintenanceService defaultMaintenanceService = new MaintenanceService();
-	final LocalDateTime defaultSinceTime = LocalDateTime.of(2016, 3, 1, 6, 0, 0, 0);
-	final LocalDateTime defaultRequestTime = LocalDateTime.of(2016, 3, 1, 7, 0, 0, 0);
-	final LocalDateTime defaultOrderTime = LocalDateTime.of(2016, 3, 1, 8, 0, 0, 0);
-	final LocalDateTime defaultResolveTime = LocalDateTime.of(2016, 3, 1, 10, 0, 0, 0);
-	final LocalDateTime defaultTilTime = LocalDateTime.of(2016, 3, 1, 12, 0, 0, 0);
+	final LocalDateTime defaultSinceTime = LocalDateTime.parse("2016-03-01T06:00:00");
+	final LocalDateTime defaultRequestTime = LocalDateTime.parse("2016-03-01T07:00:00");
+	final LocalDateTime defaultOrderTime = LocalDateTime.parse("2016-03-01T08:00:00");
+	final LocalDateTime defaultResolveTime = LocalDateTime.parse("2016-03-01T10:00:00");
+	final LocalDateTime defaultTilTime = LocalDateTime.parse("2016-03-01T12:00:00");
 	final Material brick = (Material) context.getBean("brick");
 	final Material bulb = (Material) context.getBean("bulb");
 	final Worker Bill = (Worker) context.getBean("Bill");
@@ -76,7 +76,7 @@ public class MaintenanceServiceTest {
 		ticket.addMaterial(brick);
 		ticket.addMaterial(brick);
 		ticket.addMaterial(bulb);
-		assertEquals(maint.calcMaintenanceCostForFacility(), 42.75, 0);
+		assertEquals(maint.calcMaintenanceCostForFacility(), 69, 0);
 	}
 
 	@Test

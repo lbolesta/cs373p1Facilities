@@ -55,12 +55,12 @@ public class ScheduleManagerTest {
 		assertEquals(defaultSchedule.listActualUsage().size(), 1);
 		defaultSchedule.makeFacilityMaintRequest("replace lightbulb", defaultStartTime);
 		MaintTicket ticket = defaultSchedule.getMaint().getMaintTicket("replace lightbulb"); //7
-		assertTrue(defaultSchedule.scheduleMaintenance(ticket, defaultStartTime.plusHours(1), defaultEndTime.plusHours(1))); //8-10
+		defaultSchedule.scheduleMaintenance(ticket, defaultStartTime.plusHours(1), defaultEndTime.plusHours(1)); //8-10
 		assertEquals(defaultSchedule.listActualUsage().size(), 1);
 		assertFalse(defaultSchedule.isInUseDuringInterval(defaultStartTime, defaultStartTime.plusHours(1)));
 		defaultSchedule.makeFacilityMaintRequest("repair wall", defaultStartTime);
 		MaintTicket ticket2 = defaultSchedule.getMaint().getMaintTicket("repair wall");
-		assertFalse(defaultSchedule.scheduleMaintenance(ticket2, defaultStartTime, defaultEndTime));
+		defaultSchedule.scheduleMaintenance(ticket2, defaultStartTime, defaultEndTime);
 	}
 
 	@Test

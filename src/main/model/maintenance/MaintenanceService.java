@@ -15,7 +15,9 @@ public class MaintenanceService implements IFacilityMaintenance<MaintTicket> {
 	
 	@Override
 	public void makeFacilityMaintRequest(String description, LocalDateTime start) {
-		MaintTicket ticket = new MaintTicket(description, start);
+		MaintTicket ticket = new MaintTicket();
+		ticket.setDescription(description);
+		ticket.setRequestTime(start);
 		tickets.add(ticket);
 	}
 	
@@ -29,10 +31,9 @@ public class MaintenanceService implements IFacilityMaintenance<MaintTicket> {
 	}
 
 	@Override
-	public boolean scheduleMaintenance(MaintTicket ticket, LocalDateTime startTime, LocalDateTime endTime) {
+	public void scheduleMaintenance(MaintTicket ticket, LocalDateTime startTime, LocalDateTime endTime) {
 		ticket.setOrderTime(startTime);
 		ticket.setResolveTime(endTime);
-		return true;
 	}
 
 	@Override

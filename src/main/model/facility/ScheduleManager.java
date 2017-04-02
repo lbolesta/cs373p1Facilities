@@ -36,16 +36,15 @@ public class ScheduleManager implements IFacilityMaintenance<MaintTicket>, IFaci
 	}
 	
 	@Override
-	public boolean scheduleMaintenance(MaintTicket ticket, LocalDateTime startTime, LocalDateTime endTime) {
+	public void scheduleMaintenance(MaintTicket ticket, LocalDateTime startTime, LocalDateTime endTime) {
 		if(isUnderMaintenance(startTime, endTime)) {
-			return false;
+			return;
 		}
 		else if(isInUseDuringInterval(startTime, endTime)) {
 			vacateFacility(startTime, endTime);
 		}
 		maint.scheduleMaintenance(ticket, startTime, endTime);
 		usage.assignFacilityToUse(startTime, endTime, maintUser);
-		return true;
 	}
 	
 	@Override
